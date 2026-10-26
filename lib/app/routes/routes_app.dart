@@ -1,4 +1,5 @@
 import 'package:final_depi/app/routes/route_screen_name.dart';
+import 'package:final_depi/features/onboarding/presentation/pages/firstOnboarding_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +24,12 @@ abstract class RoutesApp {
       case RouteScreenName.loginScreen:
         return MaterialPageRoute(
           builder: (context) => const LoginScreen(),
+          settings: settings,
+        );
+
+      case RouteScreenName.firstOnboardingScreen:
+        return MaterialPageRoute(
+          builder: (context) => const FirstOnboardingScreen(),
           settings: settings,
         );
 

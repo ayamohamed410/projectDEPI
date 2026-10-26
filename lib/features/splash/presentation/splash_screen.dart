@@ -21,7 +21,7 @@ class _SplashPageState extends State<SplashScreen> {
     Future.delayed(
       Duration(seconds: 3),
           () {
-        var isFristTime = LocalStorageService.getBool(LocalStorageKeys.isFristTimeRun)?? true;
+        var isFristTime = LocalStorageService.getBool(LocalStorageKeys.isFirstTimeRun)?? true;
         Navigator.pushReplacementNamed(context, isFristTime?RouteScreenName.onboarding :
         RouteScreenName.loginScreen);
       },
