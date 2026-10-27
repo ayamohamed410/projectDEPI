@@ -3,25 +3,20 @@ import 'package:final_depi/features/onboarding/presentation/widgets/onboarding_w
 import 'package:flutter/material.dart';
 import '../../data/onboarding_data.dart';
 
-
-
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
 
   @override
-  State<OnboardingScreen> createState() =>
-      _OnboardingScreenState();
+  State<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-  final PageController _pageController =
-  PageController(initialPage: 0);
+  final PageController _pageController = PageController(initialPage: 0);
 
   int _currentPage = 0;
 
   void _nextPage() {
-    if (_currentPage <
-        OnboardingModel.onboardingList.length - 1) {
+    if (_currentPage < OnboardingModel.onboardingList.length - 1) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -39,9 +34,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _finishOnboarding() {
-    Navigator.of(context).pushReplacementNamed(
-      RouteScreenName.loginScreen,
-    );
+    Navigator.of(context).pushReplacementNamed(RouteScreenName.loginScreen);
   }
 
   @override
