@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '/core/theme/themee/app_styles.dart';
 import '../widgets/container.dart';
 import '../widgets/custom_card_container.dart';
+import '../widgets/timelinestep.dart';
+
 
 class TechnicianActiveJob extends StatefulWidget {
   const TechnicianActiveJob({super.key});
@@ -218,107 +220,94 @@ class _TechnicianActiveJobState extends State<TechnicianActiveJob> {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _buildActionButton(
-                          Icons.chat_bubble_outline,
-                          "Chat",
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: _buildActionButton(Icons.phone_outlined, "Call"),
-                      ),
-                    ],
-                  ),
+              //chaaaaaaaaaaaaat  
+
+        Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,children: [
+            ElevatedButton(onPressed: (){},style:
+             ElevatedButton.styleFrom(backgroundColor:AppColors.bluenewcontainer, 
+  ),child:Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(children: [Icon(Icons.chat,size: 24,color: AppColors.primary,),SizedBox(height: 6,),
+              Text("Chat",style: TextStyle(color: Colors.black),)],),
+            ))
+              ,  ElevatedButton(onPressed: (){}, style:
+             ElevatedButton.styleFrom(backgroundColor:AppColors.bluenewcontainer),child:Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(children: [Icon(Icons.call,size: 24,color: AppColors.primary),SizedBox(height: 6,),Text("Call",style: TextStyle(color: Colors.black),)],),
+              ))
+              ],)
                 ],
               ),
             ),
+          
+
+          
+          
+                
             const SizedBox(height: 16),
 
-            // 3. كارت الـ Manual Status Progression & Timeline
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        "MANUAL STATUS PROGRESSION",
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFE0F2FE),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Text(
-                          "No GPS Required",
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _buildStatusStep(
-                          "1. On Way",
-                          Icons.check_circle_outline,
-                          false,
-                          true,
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: _buildStatusStep(
-                          "2. Arrived",
-                          Icons.check_circle_outline,
-                          false,
-                          true,
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: _buildStatusStep(
-                          "3. In Progress",
-                          Icons.play_arrow,
-                          true,
-                          false,
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: _buildStatusStep(
-                          "4. Complete",
-                          Icons.hourglass_empty,
-                          false,
-                          false,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
+buildCustomContainer(child: Column(children: [
+
+  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [const Text(
+          'MANUAL STATUS PROGRESSION',style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey, 
+          ),)
+        ,
+          buildCustomContainer(cardColor: AppColors.bluenewcontainer,child: Text(
+        'No GPS Required',
+          style: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color:AppColors.primary,
+          ),
+        ),),    ],
+          ),
+
+            SingleChildScrollView(scrollDirection: Axis.horizontal,
+              child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,children: [
+                        
+                        
+              ElevatedButton(onPressed: (){},style:
+               ElevatedButton.styleFrom(backgroundColor:AppColors.bluenewcontainer, 
+                shape:RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),) ),child:Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(children: [Icon(Icons.check_circle_outline,size: 24,color: AppColors.primary,),SizedBox(height: 6,),
+                Text("1. On Way",style: TextStyle(color: Colors.black),)],),
+              ))
+                , 
+                SizedBox(width: 6,),
+                 ElevatedButton(onPressed: (){}, style:
+               ElevatedButton.styleFrom(backgroundColor:AppColors.bluenewcontainer,shape:RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),) ),child:Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(children: [Icon(Icons.check_circle_outline,size: 24,color: AppColors.primary),
+                  SizedBox(height: 6,),Text("2. Arrived",style: TextStyle(color: Colors.black),)],),
+                )
+                ), 
+                  SizedBox(width: 6,),
+                //3
+                 ElevatedButton(onPressed: (){}, style:
+               ElevatedButton.styleFrom(backgroundColor:AppColors.bluenewcontainer,shape:RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),)),child:Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(children: [Icon(Icons.play_arrow_rounded,size: 24,color: AppColors.primary),SizedBox(height: 6,),Text("3. In Progress",style: TextStyle(color: Colors.black),)],),
+                )
+                ),  
+                  SizedBox(width: 6,),
+                //4
+                ElevatedButton(onPressed: (){}, style:
+               ElevatedButton.styleFrom(backgroundColor:AppColors.bluenewcontainer,shape:RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),) ),child:Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(children: [Icon(Icons.hourglass_empty,size: 24,color: AppColors.primary),SizedBox(height: 6,),Text("4. Complete",style: TextStyle(color: Colors.black),)],),
+                )
+                )
+                ],),
+            ) 
+               ,    const SizedBox(height: 12),
                   Row(
                     children: const [
                       Icon(Icons.sync, size: 12, color: Colors.blue),
@@ -330,14 +319,110 @@ class _TechnicianActiveJobState extends State<TechnicianActiveJob> {
                         ),
                       ),
                     ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
+                  ),  const SizedBox(height: 18),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+          const Divider(
+  color: Color.fromARGB(255, 218, 231, 249), 
+  thickness: 1,           
+  height: 1,
+),
+  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [const Text(
+      'Service Timeline',
+      style: AppTextStyles.sectionHeader,
+    ),
+    
+    buildCustomContainer(cardColor: AppColors.bluenewcontainer,child: Text( 'Step 4 of 5',style: TextStyle(color:AppColors.primary),))],),
+Column(
+
+  
+  children:  [
+  
+    Timelinestep(
+      title: 'Accepted',
+      subtitle: 'Confirmed at 10:15 AM',
+    ),
+    Timelinestep(
+      title: 'On the Way',
+      subtitle: 'Dispatched at 10:28 AM',
+    ),
+    Timelinestep(
+      title: 'Arrived',
+      subtitle: 'Marked at 10:48 AM',
+    ),
+    Timelinestep(
+  title: 'In Progress (Active)',
+  subtitle: 'Started 10:52 AM • Work underway',
+  icon: Icons.hourglass_bottom, lineColor: Color(0xFFE3E6EB),
+      titleColor: Color(0xFF1456E0),
+    badgeText: '24 mins',
+      
+      )
+
+    ,Timelinestep(
+      title: 'Completed',
+      subtitle: 'Awaiting completion sign-off',
+      circleColor: Color(0xFFE3E6EB),
+      icon: Icons.flag_outlined,
+      lineColor: Colors.transparent,
+      titleColor: Color(0xFF6B7280),
+    ),  ],
+),
+],)),
+
+
+
+
+
+
+
 
             // 4. كارت Diagnosis & Billing
-            Container(
+          
+            const SizedBox(height: 16),
+
+        
+            ///widjet الاخر
+            CustomCardContainer(
+
+              
+              child: Column(
+                children: [
+ Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: const Color(0xFFEBF5FF),
@@ -373,10 +458,219 @@ class _TechnicianActiveJobState extends State<TechnicianActiveJob> {
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+                Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [Text(
+      'Logged Parts & Hardware',
+      style: AppTextStyles.sectionHeader,
+    ),
+    Row(children: [ IconButton(onPressed: (){}, icon: Icon(Icons.add_circle_outline, size: 18, color:AppColors.primary)), 
+    SizedBox(width: 2),Text(
+          'Add Item',
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF1456E0),
+          ),
+        ),],)
+    ],),
+SizedBox(height: 12),
+buildCustomContainer(cardColor: AppColors.bluenewcontainer,child: Row(children: [
+  Icon(Icons.settings_outlined, 
+size: 20, color:Colors.grey),
+      SizedBox(width: 12),
+      
+      Expanded(
+        child: Column( crossAxisAlignment: CrossAxisAlignment.start,
+        children: [Text(
+                'Brass compression valve 1/2"', 
+                style:AppTextStyles.cardTitle,
+            
+              ),SizedBox(height: 2),
+                Text(
+                'Qty: 1 • OEM Standard', 
+                style: TextStyle(fontSize: 12, color:Colors.grey),
+              ),
+              ],),
+      ),
+  Text(
+        '+ EGP 120', 
+        style: AppTextStyles.cardTitle,
+      ),    ],)),
 
-            // 5. زر الحساب وإكمال الخدمة
-            SizedBox(
+
+buildCustomContainer(cardColor: AppColors.bluenewcontainer,child: Row(children: [
+  Icon(Icons.straighten, 
+size: 20, color:Colors.grey),
+      SizedBox(width: 12),
+      
+      Expanded(
+        child: Column( crossAxisAlignment: CrossAxisAlignment.start,
+        children: [Text(
+              'High-density Teflon tape', 
+                style:AppTextStyles.cardTitle,
+            
+              ),SizedBox(height: 2),
+                Text(
+                  'Qty: 2 rolls • Water-grade', 
+                style: TextStyle(fontSize: 12, color:Colors.grey),
+              ),
+              ],),
+      ),
+  Text(
+        '+ EGP 30', 
+        style: AppTextStyles.cardTitle,
+      ),    ],)),
+
+SizedBox(height: 20),
+Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [Text(
+      'Photo Verification',
+      style:AppTextStyles.sectionHeader,
+    ),Row(children: [ Icon(Icons.check_circle, size: 16, color:AppColors.primary),
+        SizedBox(width: 4),
+        Text(
+          '2 of 2 Required',
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF1456E0),
+          ),
+        ),],)],),
+      SizedBox(height: 12),
+      Row(children: [ Expanded( 
+      child: ClipRRect( 
+        borderRadius: BorderRadius.circular(12),
+        child: SizedBox(
+          height: 120,
+          child: Stack( 
+            fit: StackFit.expand, 
+            children: [
+              Image.asset(
+                'assets/images/before_fix.png', 
+                fit: BoxFit.cover, 
+              ),
+              Container( // 
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Colors.transparent, Colors.black54],
+                  ),
+                ),
+              ),
+              Positioned( 
+                left: 10,
+                bottom: 8,
+                child: Text(
+                  'Before Fix',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              Positioned( // 
+                right: 10,
+                bottom: 8,
+                child: Icon(Icons.check_circle, size: 18, color: Color(0xFF1456E0)),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+
+    SizedBox(width: 12),  Expanded(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: SizedBox(
+          height: 120,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Image.asset(
+                'assets/images/after_fix.png', // عدلي المسار
+                fit: BoxFit.cover,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Colors.transparent, Colors.black54],
+                  ),
+                ),
+              ),
+              Positioned(
+                left: 10,
+                bottom: 8,
+                child: Text(
+                  'After Fix',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              Positioned(
+                right: 10,
+                bottom: 8,
+                child: Icon(Icons.check_circle, size: 18, color: Color(0xFF1456E0)),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),],)
+
+            ,      //[اخر جزء ]
+                  buildCustomContainer(cardColor: AppColors.bluenewcontainer,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Base Inspection & Labor",style: TextStyle(color: Colors.grey,)),
+                            Text("EGP 270",style: TextStyle(fontSize: 12,color: Colors.black),),
+                          ],
+                        ),
+
+                         const SizedBox(height: 14),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Logged Extra Parts", style: TextStyle(color: Colors.grey,)),
+                            Text("+EGP 150",style: TextStyle(fontSize: 12,color: Colors.black),),
+                          ],
+                        ),  const SizedBox(height: 20),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Final Billing Amount", style: AppTextStyles.sectionHeader), 
+                                   Text(maxLines: 1,
+                                           overflow: TextOverflow.ellipsis,"Verified against labor guideline tier   ",
+                                          style: TextStyle(color: Colors.grey,))
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 100,width: 150,child: CustomCardContainer(padding: EdgeInsets.all(14),child: 
+                            Text("EGP\n420",maxLines: 2,style: TextStyle(height: 1.1,fontSize: 24,color: Colors.blueAccent),)))
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+      
+          SizedBox(
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
@@ -407,8 +701,7 @@ class _TechnicianActiveJobState extends State<TechnicianActiveJob> {
                 ),
               ),
             ),
-            const SizedBox(height: 8),
-
+          
             // 6. زر الإبلاغ عن مشكلة
             SizedBox(
               width: double.infinity,
@@ -442,70 +735,20 @@ class _TechnicianActiveJobState extends State<TechnicianActiveJob> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
-
-            ///widjet الاخر
-            CustomCardContainer(
-              child: Column(
-                children: [
-                  //[اخر جزء ]
-                  buildCustomContainer(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("Base Inspection & Labor", style: AppTextStyles.cardTitle),
-                            Text("EGP 270",style: TextStyle(fontSize: 12,color: Colors.black),),
-                          ],
+          const SizedBox(height: 12),
+                  Row(
+                    children: const [
+                      Icon(Icons.sync, size: 12, color: Colors.blue),
+                      SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          "Manual status updates sync automatically to customer in real-time without GPS.",
+                          style: TextStyle(fontSize: 10, color: Colors.grey),
                         ),
-
-                         const SizedBox(height: 14),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("Logged Extra Parts", style: AppTextStyles.cardTitle),
-                            Text("+EGP 150",style: TextStyle(fontSize: 12,color: Colors.black),),
-                          ],
-                        ),  const SizedBox(height: 20),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("Final Billing Amount", style: AppTextStyles.sectionHeader), 
-                                   Text(maxLines: 1,
-                                           overflow: TextOverflow.ellipsis,"Verified against labor guideline tier   ", style: AppTextStyles.caption)
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 100,width: 150,child: CustomCardContainer(padding: EdgeInsets.all(14),child: 
-                            Text("EGP\n420",maxLines: 2,style: TextStyle(height: 1.1,fontSize: 24,color: Colors.blueAccent),)))
-                          ],
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-      
-        
           
-          
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Icon(Icons.person, color: Colors.blue),
-                Expanded(
-                  child: Text(maxLines: 1,
-                          overflow: TextOverflow.ellipsis,"aaaaaaaaaaaaaaaaaaa", style: AppTextStyles.caption),
-                ),
-              ],
-            ),
 
             ///widjet الاخر
           ],
@@ -514,63 +757,4 @@ class _TechnicianActiveJobState extends State<TechnicianActiveJob> {
     );
   }
 
-  Widget _buildActionButton(IconData icon, String label) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF1F5F9),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        children: [
-          Icon(icon, color: Colors.blue, size: 20),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatusStep(
-    String title,
-    IconData icon,
-    bool isActive,
-    bool isDone,
-  ) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-      decoration: BoxDecoration(
-        color: isActive
-            ? Colors.blue
-            : (isDone ? const Color(0xFFE2E8F0) : const Color(0xFFF8FAFC)),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        children: [
-          Icon(
-            icon,
-            size: 14,
-            color: isActive
-                ? Colors.white
-                : (isDone ? Colors.blue : Colors.grey),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 9,
-              fontWeight: FontWeight.bold,
-              color: isActive
-                  ? Colors.white
-                  : (isDone ? Colors.black87 : Colors.grey),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
