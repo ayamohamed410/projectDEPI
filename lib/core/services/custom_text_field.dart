@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../theme/app_colors.dart';
+import '../theme/app_colors.dart';
 
 class CustomTextField extends StatefulWidget {
   final TextEditingController? controller;
@@ -84,7 +84,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
       onFieldSubmitted: widget.onFieldSubmitted,
       onSaved: widget.onSaved,
       onTap: widget.onTap,
-      maxLines: widget.maxLines,
+      maxLines: (widget.isPassword ?? false) ? 1 : (widget.maxLines ?? 1),
+
       minLines: widget.minLines,
       maxLength: widget.maxLength,
       obscureText: widget.isPassword ?? false ? obscureText : false,
@@ -136,7 +137,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: const BorderSide(
-            color: ColorsApp.primaryColor,
+            color: ColorsApp.greyTextField,
             width: 1,
           ),
         ),
@@ -145,22 +146,22 @@ class _CustomTextFieldState extends State<CustomTextField> {
         disabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: const BorderSide(
-            color: ColorsApp.primaryColor,
+            color: ColorsApp.greyTextField,
             width: 1,
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: const BorderSide(
-            color: ColorsApp.primaryColor,
+            color: ColorsApp.greyTextField,
             width: 1,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: const BorderSide(
-            color: ColorsApp.primaryColor,
-            width: 1,
+            color: ColorsApp.greyColor,
+            width: 1.5,
           ),
         ),
         errorStyle: const TextStyle(

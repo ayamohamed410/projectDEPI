@@ -38,7 +38,7 @@ class OnboardingModel {
       "Compare nearby professionals and choose the right expert for you.",
     ),
     OnboardingModel(
-      image: AssetsApp.onboardingOne,
+      image: AssetsApp.onboardingFive,
       header: "Track Every Step",
       description:
       "Stay updated from request acceptance to arrival and job completion.",

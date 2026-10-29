@@ -40,7 +40,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   void _finishOnboarding() {
     Navigator.of(context).pushReplacementNamed(
-      RouteScreenName.loginScreen,
+      RouteScreenName.selectionScreen,
     );
   }
 
