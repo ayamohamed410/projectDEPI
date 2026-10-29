@@ -1,9 +1,5 @@
 import 'package:final_depi/app/routes/route_screen_name.dart';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-
 import '../../features/auth/presentation/pages/forgetPassword/forget_password.dart';
 import '../../features/auth/presentation/pages/login/login_screen.dart';
 import '../../features/auth/presentation/pages/register/selection_screen.dart';

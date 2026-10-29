@@ -5,6 +5,7 @@ import '../../../../../core/extensions/validate.dart';
 import '../../../../../core/services/Custom_button_widget.dart';
 import '../../../../../core/services/custom_text_field.dart';
 import '../../../../../core/theme/app_colors.dart';
+import '../../../../home/presentation/screens/customer_home_screen.dart';
 import '../login/login_screen.dart';
 import 'selection_screen.dart';
 
@@ -38,11 +39,10 @@ class _SignupCustomerScreenState
 
   void _createAccount() {
     if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Customer registration is not connected yet.',
-          ),
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const CustomerHomeScreen(),
         ),
       );
     }
