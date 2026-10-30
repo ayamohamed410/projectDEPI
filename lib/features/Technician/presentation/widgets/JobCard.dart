@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'container.dart';
-import '/core/theme/themee/app_styles.dart';
+import '/core/theme//app_styles.dart';
 
 class Jobcard extends StatelessWidget {
   Jobcard({
