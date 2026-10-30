@@ -7,4 +7,8 @@ class RouteScreenName {
   static const String describeProblem = '/describe_problem';
   static const String aiResult = '/ai_result';
   static const String techniciansList = '/technicians_list';
+  static const String jobsHistory = '/jobsHistory';
+  static const String technicianActiveJob = '/technicianActiveJob';
+  static const String technicianProfile = '/technicianProfile';
+  static const String technicianChat = '/technicianChat';
 }
