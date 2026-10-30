@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/job1_model.dart';
 
-
-
 import '../widgets/container.dart';
 import '../widgets/custom_card_container.dart';
 import '../widgets/JobCard.dart';
@@ -21,7 +19,8 @@ class _jobsHistoryState extends State<jobsHistory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Padding(
           padding: const EdgeInsets.all(20),
           child: Row(
@@ -91,22 +90,27 @@ class _jobsHistoryState extends State<jobsHistory> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              CustomCardContainer(padding: EdgeInsets.all(10),
+              CustomCardContainer(
+                padding: EdgeInsets.all(10),
                 child: Row(
                   children: [
                     const Icon(Icons.search, color: Colors.grey),
                     const SizedBox(width: 12),
                     Expanded(
                       child: TextField(
-                        decoration: InputDecoration(contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
                           hintText:
                               'Search by customer, service, or request ID',
                           hintStyle: TextStyle(
                             color: Colors.grey,
                             fontSize: 13,
                           ),
-                          
-                         border: InputBorder.none,
+
+                          border: InputBorder.none,
                         ),
                       ),
                     ),
@@ -211,21 +215,22 @@ class _jobsHistoryState extends State<jobsHistory> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ListView.builder(
-                      shrinkWrap: true, // بيخليه يكبر على قد العناصر بس وما ياخدش مساحة لا نهائية
-  physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
                       itemCount: jobdata.length,
                       itemBuilder: (context, index) {
                         final jobItem = jobdata[index];
-                      return Jobcard(varid: jobItem.id,
-                                vartitel: jobItem.title, // تم التصحيح من t إلى title
-                                vardateTime: jobItem.dateTime,
-                                varpayout: jobItem.netPayout,
-                                varname: "Tarek Mansour", // اسم افتراضي أو من الموديل لو أضفتيه
-                                varcompleted: jobItem.status ?? "Pending",
-                                varrating: jobItem.rating,
-                                varlocation: "New Cairo", // مكان افتراضي أو من الموديل
-                                varview: "View Work Order",);
-                        
+                        return Jobcard(
+                          varid: jobItem.id,
+                          vartitel: jobItem.title,
+                          vardateTime: jobItem.dateTime,
+                          varpayout: jobItem.netPayout,
+                          varname: "Tarek Mansour",
+                          varcompleted: jobItem.status ?? "Pending",
+                          varrating: jobItem.rating,
+                          varlocation: "New Cairo",
+                          varview: "View Work Order",
+                        );
                       },
                     ),
                   ],
