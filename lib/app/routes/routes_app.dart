@@ -9,6 +9,12 @@ import '../../features/splash/presentation/splash_screen.dart';
 import '../../features/home/presentation/screens/customer_home_screen.dart';
 import '../../features/home/presentation/screens/describe_problem_screen.dart';
 import '../../features/home/presentation/screens/ai_result_screen.dart';
+//screens technician
+import "../features/Technician/presentation/pages/jobsHistory.dart";
+import "../features/Technician/presentation/pages/TechnicianChat .dart";
+import "../features/Technician/presentation/pages/technician_profile.dart";
+import "../features/Technician/presentation/pages/technician_active_job.dart";
+
 
 abstract class RoutesApp {
   static Route<dynamic> onGeneratedRoute(RouteSettings settings) {
@@ -46,6 +52,30 @@ abstract class RoutesApp {
       case RouteScreenName.aiResult:
         return MaterialPageRoute(
           builder: (context) => const AiResultScreen(),
+          settings: settings,
+        );
+
+        case RouteScreenName.jobsHistory:
+        return MaterialPageRoute(
+          builder: (context) => const jobsHistory(), // 
+          settings: settings,
+        );
+
+      case RouteScreenName.technicianActiveJob:
+        return MaterialPageRoute(
+          builder: (context) => const TechnicianActiveJob(),
+          settings: settings,
+        );
+
+      case RouteScreenName.technicianProfile:
+        return MaterialPageRoute(
+          builder: (context) => const Sc22TechnicianProfile(),
+          settings: settings,
+        );
+
+      case RouteScreenName.technicianChat:
+        return MaterialPageRoute(
+          builder: (context) => const TechnicianChat(),
           settings: settings,
         );
 
