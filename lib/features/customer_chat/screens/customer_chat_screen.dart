@@ -7,6 +7,7 @@ import 'package:final_depi/features/customer_chat/widgets/protected_communicatio
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+
 class CustomerChatScreen extends StatefulWidget {
   const CustomerChatScreen({super.key});
 
