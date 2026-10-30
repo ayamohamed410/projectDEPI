@@ -7,7 +7,6 @@ import '../../../../../core/services/custom_text_field.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../home/presentation/screens/customer_home_screen.dart';
 import '../login/login_screen.dart';
-import 'selection_screen.dart';
 
 class SignupCustomerScreen extends StatefulWidget {
   const SignupCustomerScreen({super.key});

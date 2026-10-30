@@ -1,3 +1,4 @@
+import 'package:final_depi/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class TechnicianCardWidget extends StatelessWidget {
@@ -262,6 +263,60 @@ class TechnicianCardWidget extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+//************************AYA******************************* */
+class TechnicianCard extends StatelessWidget {
+  const TechnicianCard({
+    super.key,
+    required this.icon,
+    required this.text1,
+    required this.text2,
+    required this.text3,
+    required this.iconColor,
+  });
+  final IconData icon;
+  final Color iconColor;
+
+  final String text1;
+  final String text2;
+  final String text3;
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: ColorsApp.whiteColor,
+
+      child: Padding(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+              children: [
+                Text(
+                  text1,
+                  style: TextStyle(color: Color(0xff44474D), fontSize: 14),
+                ),
+                Icon(icon, color: iconColor),
+              ],
+            ),
+            Text(
+              text2,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+            Text(
+              text3,
+
+              style: TextStyle(fontSize: 14, color: Color(0xff44474D)),
+            ),
+          ],
+        ),
       ),
     );
   }

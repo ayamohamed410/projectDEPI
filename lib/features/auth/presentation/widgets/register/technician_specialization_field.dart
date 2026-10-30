@@ -32,7 +32,7 @@ class TechnicianSpecializationField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         DropdownButtonFormField<String>(
-          value: selectedValue,
+          initialValue: selectedValue,
           isExpanded: true,
           decoration: InputDecoration(
             hintText: 'Choose your specialization',

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../../app/routes/route_screen_name.dart';
 import '../screens/ai_result_screen.dart';
 
 class AnalyzeAiButton extends StatelessWidget {
