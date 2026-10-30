@@ -5,28 +5,22 @@ class Job1Model {
   final String title;
   final DateTime dateTime;
   final String? status;
-
-  // final JobStatus status; // حالة الطلب (Completed, Cancelled, الخ)
-  // final CustomerModel? customer; // بيانات العميل
-  final double netPayout; // المبلغ النهائي المدفوع للمصنّع/الفني
-  final double? rating; // التقييم (مثلاً 5.0)
-  final String? reviewComment; // التعليق (مثلاً "Exceptional Service!")
-  final String? cancellationNote; // ملاحظة الإلغاء (إن وجدت)
-  final double? cancellationFeeCredited; // رسوم التعويض في حال الإلغاء
+  final double netPayout;
+  final double? rating;
+  final String? reviewComment;
+  final String? cancellationNote;
+  final double? cancellationFeeCredited;
 
   Job1Model({
-     this.status,
+    this.status,
     required this.cancellationFeeCredited,
     required this.id,
     required this.title,
     required this.dateTime,
-    // required this.status,
-    // this.customer,
     required this.netPayout,
     this.rating,
     this.reviewComment,
     this.cancellationNote,
-  
   });
 }
 
@@ -63,4 +57,5 @@ List jobdata = [
     reviewComment: "Exceptional Service!",
     cancellationNote: null,
     cancellationFeeCredited: null,
-  ),];
+  ),
+];
