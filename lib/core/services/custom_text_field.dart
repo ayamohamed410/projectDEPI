@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../theme/app_colors.dart';
+import '../theme/app_colors.dart';
 
 class CustomTextField extends StatefulWidget {
   final TextEditingController? controller;
@@ -70,9 +70,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
+
     return TextFormField(
       onTapOutside: (event) {
-        FocusManager.instance.primaryFocus!.unfocus();
+        FocusManager.instance.primaryFocus?.unfocus();
       },
       textDirection: widget.textDirection,
       controller: widget.controller,
@@ -84,17 +85,20 @@ class _CustomTextFieldState extends State<CustomTextField> {
       onFieldSubmitted: widget.onFieldSubmitted,
       onSaved: widget.onSaved,
       onTap: widget.onTap,
-      maxLines: widget.maxLines,
+      maxLines: (widget.isPassword ?? false) ? 1 : (widget.maxLines ?? 1),
       minLines: widget.minLines,
       maxLength: widget.maxLength,
-      obscureText: widget.isPassword ?? false ? obscureText : false,
-      obscuringCharacter: '*',
+      obscureText: (widget.isPassword ?? false) ? obscureText : false,
+      obscuringCharacter: widget.obscuringCharacter ?? '*',
       keyboardType: widget.keyboardType,
       inputFormatters: widget.inputFormatters,
       enabled: widget.enabled,
-      style: widget.textStyle ??
+      style:
+          widget.textStyle ??
           theme.textTheme.bodyMedium?.copyWith(
-              color: const Color(0xFF222222), fontWeight: FontWeight.w500),
+            color: const Color(0xFF222222),
+            fontWeight: FontWeight.w500,
+          ),
       autovalidateMode: AutovalidateMode.onUserInteraction,
       textInputAction: widget.action ?? TextInputAction.done,
       focusNode: widget.focusNode,
@@ -106,23 +110,22 @@ class _CustomTextFieldState extends State<CustomTextField> {
           fontWeight: FontWeight.w500,
         ),
         prefixIconConstraints: const BoxConstraints(minWidth: 56),
-        suffixIcon: widget.isPassword ?? false
+        suffixIcon: (widget.isPassword ?? false)
             ? InkWell(
-          onTap: () {
-            setState(() {
-              obscureText = !obscureText;
-            });
-          },
-          child: Icon(
-            obscureText
-                ? Icons.visibility_outlined
-                : Icons.visibility_off_outlined,
-            color: Colors.grey,
-          ),
-        )
+                onTap: () {
+                  setState(() {
+                    obscureText = !obscureText;
+                  });
+                },
+                child: Icon(
+                  obscureText
+                      ? Icons.visibility_outlined
+                      : Icons.visibility_off_outlined,
+                  color: Colors.grey,
+                ),
+              )
             : widget.suffixWidget,
         prefixIcon: widget.prefixIcon,
-
         hintText: widget.hint,
         hintStyle: TextStyle(
           fontFamily: "Inter",
@@ -136,44 +139,34 @@ class _CustomTextFieldState extends State<CustomTextField> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: const BorderSide(
-            color: ColorsApp.primaryColor,
+            color: ColorsApp.greyTextField,
             width: 1,
           ),
         ),
-        // suffix: isPass widget.suffixWidget,
         contentPadding: widget.edgeInsets,
         disabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: const BorderSide(
-            color: ColorsApp.primaryColor,
+            color: ColorsApp.greyTextField,
             width: 1,
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: const BorderSide(
-            color: ColorsApp.primaryColor,
+            color: ColorsApp.greyTextField,
             width: 1,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(
-            color: ColorsApp.primaryColor,
-            width: 1,
-          ),
+          borderSide: const BorderSide(color: ColorsApp.greyColor, width: 1.5),
         ),
-        errorStyle: const TextStyle(
-          color: Color(0xFFCC0000),
-          fontSize: 12,
-        ),
+        errorStyle: const TextStyle(color: Color(0xFFCC0000), fontSize: 12),
         errorMaxLines: 6,
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(
-            color: Color(0xFFCC0000),
-            width: 1,
-          ),
+          borderSide: const BorderSide(color: Color(0xFFCC0000), width: 1),
         ),
       ),
     );

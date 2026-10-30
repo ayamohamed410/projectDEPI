@@ -3,7 +3,6 @@ import '../widgets/custom_app_bar.dart';
 import '../widgets/ai_triage_banner.dart';
 import '../widgets/in_progress_card.dart';
 import '../widgets/core_services_grid.dart';
-import '../widgets/custom_bottom_nav.dart';
 
 class CustomerHomeScreen extends StatelessWidget {
   const CustomerHomeScreen({super.key});
@@ -41,7 +40,7 @@ class CustomerHomeScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: const CustomBottomNavBar(),
+      // bottomNavigationBar: const CustomBottomNavBar(),
     );
   }
 }
