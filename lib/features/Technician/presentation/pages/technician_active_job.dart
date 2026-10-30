@@ -123,7 +123,7 @@ class _TechnicianActiveJobState extends State<TechnicianActiveJob> {
                         children: [
                           CircleAvatar(
                             radius: 28,
-                            backgroundImage: AssetImage('assets/image.png'),
+                          child: Icon(Icons.person),
                           ),
                           Positioned(
                             right: 0,
