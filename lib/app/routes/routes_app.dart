@@ -11,20 +11,20 @@ import '../../features/home/presentation/screens/customer_home_screen.dart';
 import '../../features/home/presentation/screens/describe_problem_screen.dart';
 import '../../features/home/presentation/screens/ai_result_screen.dart';
 //screens technician
-import "../features/Technician/presentation/pages/jobsHistory.dart";
-import "../features/Technician/presentation/pages/TechnicianChat .dart";
-import "../features/Technician/presentation/pages/technician_profile.dart";
-import "../features/Technician/presentation/pages/technician_active_job.dart";
+import "../../features/Technician/presentation/pages/jobsHistory.dart";
+import "../../features/Technician/presentation/pages/TechnicianChat .dart";
+import "../../features/Technician/presentation/pages/technician_profile.dart";
+import "../../features/Technician/presentation/pages/technician_active_job.dart";
 
 import '../../features/onboarding/presentation/pages/onboarding_screen.dart';
 import '../../features/splash/presentation/splash_screen.dart';
 
 
-import '../features/customer_chat/screens/customer_chat_screen.dart';
-import '../features/customer_service_details/screens/customer_service_details_screen.dart';
-import '../features/customer_settings/screens/customer_settings_screens.dart';
-import '../features/technical_home/screens/technician_dashboard_screen.dart';
-import '../features/rating_and_review/screens/rating_and_review_screen.dart';
+import '../../features/customer_chat/screens/customer_chat_screen.dart';
+import '../../features/customer_service_details/screens/customer_service_details_screen.dart';
+import '../../features/customer_settings/screens/customer_settings_screens.dart';
+import '../../features/technical_home/screens/technician_dashboard_screen.dart';
+import '../../features/rating_and_review/screens/rating_and_review_screen.dart';
 
 abstract class RoutesApp {
   static Route<dynamic> onGeneratedRoute(RouteSettings settings) {
@@ -104,7 +104,7 @@ abstract class RoutesApp {
 
       case RouteScreenName.technicianProfile:
         return MaterialPageRoute(
-          builder: (context) => const Sc22TechnicianProfile(),
+          builder: (context) =>  Sc22TechnicianProfile(),
           settings: settings,
         );
 
