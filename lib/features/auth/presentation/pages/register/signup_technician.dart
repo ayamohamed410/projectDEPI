@@ -3,6 +3,8 @@ import '../../../../../core/extensions/validate.dart';
 import '../../../../../core/services/Custom_button_widget.dart';
 import '../../../../../core/services/custom_text_field.dart';
 import '../../../../../core/theme/app_colors.dart';
+
+import '../../../../technical_home/screens/technician_dashboard_screen.dart';
 import '../../widgets/register/signup_section_label.dart';
 import '../../widgets/register/technician_signup_header.dart';
 import '../../widgets/register/technician_specialization_field.dart';
@@ -79,13 +81,21 @@ class _SignupTechnicianScreenState
     // TODO: Connect Firebase Authentication.
     // TODO: Save technician details in Cloud Firestore.
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text(
-          'Technician registration is not connected yet.',
+    //ScaffoldMessenger.of(context).showSnackBar(
+      //const SnackBar(
+       // content: Text(
+       //   'Technician registration is not connected yet.',
+      //  ),
+     // ),
+   // );
+    if (_formKey.currentState!.validate()) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const TechnicianDashboardScreen(),
         ),
-      ),
-    );
+      );
+    }
   }
 
   @override
