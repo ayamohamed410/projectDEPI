@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
-  const CustomBottomNavBar({super.key});
+  const CustomBottomNavBar(NavBarItem navBarItem, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,18 +14,18 @@ class CustomBottomNavBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: const [
-          _NavBarItem(icon: Icons.home, label: 'Home', isSelected: true),
-          _NavBarItem(
+          NavBarItem(icon: Icons.home, label: 'Home', isSelected: true),
+          NavBarItem(
             icon: Icons.description_outlined,
             label: 'Requests',
             isSelected: false,
           ),
-          _NavBarItem(
+          NavBarItem(
             icon: Icons.chat_bubble_outline,
             label: 'Messages',
             isSelected: false,
           ),
-          _NavBarItem(
+          NavBarItem(
             icon: Icons.settings_outlined,
             label: 'Settings',
             isSelected: false,
@@ -36,12 +36,13 @@ class CustomBottomNavBar extends StatelessWidget {
   }
 }
 
-class _NavBarItem extends StatelessWidget {
+class NavBarItem extends StatelessWidget {
   final IconData icon;
   final String label;
   final bool isSelected;
 
-  const _NavBarItem({
+  const NavBarItem({
+    super.key,
     required this.icon,
     required this.label,
     required this.isSelected,

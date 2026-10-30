@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../../app/routes/route_screen_name.dart';
 import '../screens/describe_problem_screen.dart';
 
 class AiSmartTriageBanner extends StatelessWidget {
