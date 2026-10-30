@@ -19,6 +19,13 @@ import "../features/Technician/presentation/pages/technician_active_job.dart";
 import '../../features/onboarding/presentation/pages/onboarding_screen.dart';
 import '../../features/splash/presentation/splash_screen.dart';
 
+
+import '../features/customer_chat/screens/customer_chat_screen.dart';
+import '../features/customer_service_details/screens/customer_service_details_screen.dart';
+import '../features/customer_settings/screens/customer_settings_screens.dart';
+import '../features/technical_home/screens/technician_dashboard_screen.dart';
+import '../features/rating_and_review/screens/rating_and_review_screen.dart';
+
 abstract class RoutesApp {
   static Route<dynamic> onGeneratedRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -104,6 +111,36 @@ abstract class RoutesApp {
       case RouteScreenName.technicianChat:
         return MaterialPageRoute(
           builder: (context) => const TechnicianChat(),
+          settings: settings,
+        );
+
+        case RouteScreenName.customerChat:
+        return MaterialPageRoute(
+          builder: (context) => const CustomerChatScreen(),
+          settings: settings,
+        );
+
+      case RouteScreenName.customerServiceDetails:
+        return MaterialPageRoute(
+          builder: (context) => const CustomerServiceDetailsScreen(),
+          settings: settings,
+        );
+
+      case RouteScreenName.customerSettings:
+        return MaterialPageRoute(
+          builder: (context) => const CustomerSettingsScreen(),
+          settings: settings,
+        );
+
+      case RouteScreenName.technicianDashboard:
+        return MaterialPageRoute(
+          builder: (context) => const TechnicianDashboardScreen(),
+          settings: settings,
+        );
+
+      case RouteScreenName.ratingAndReview:
+        return MaterialPageRoute(
+          builder: (context) => const RatingReviewScreen(),
           settings: settings,
         );
 
