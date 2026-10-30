@@ -4,7 +4,7 @@ import '../../models/job1_model.dart';
 import '../widgets/container.dart';
 import '../widgets/custom_card_container.dart';
 import '../widgets/JobCard.dart';
-import '/core/theme/themee/app_styles.dart';
+import '/core/theme//app_styles.dart';
 
 class jobsHistory extends StatefulWidget {
   const jobsHistory({super.key});
