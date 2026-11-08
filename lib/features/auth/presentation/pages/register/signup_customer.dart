@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../../../../core/constants/assets_app.dart';
 import '../../../../../core/extensions/validate.dart';
 import '../../../../../core/services/Custom_button_widget.dart';
@@ -7,6 +6,10 @@ import '../../../../../core/services/custom_text_field.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../home/presentation/screens/customer_home_screen.dart';
 import '../login/login_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../bloc/auth_bloc.dart';
+import '../../bloc/auth_event.dart';
+import '../../bloc/auth_state.dart';
 
 class SignupCustomerScreen extends StatefulWidget {
   const SignupCustomerScreen({super.key});
@@ -38,10 +41,12 @@ class _SignupCustomerScreenState
 
   void _createAccount() {
     if (_formKey.currentState!.validate()) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const CustomerHomeScreen(),
+      context.read<AuthBloc>().add(
+        SignUpCustomerRequested(
+          name: _nameController.text.trim(),
+          email: _emailController.text.trim(),
+          phone: _phoneController.text.trim(),
+          password: _passwordController.text,
         ),
       );
     }
@@ -65,7 +70,25 @@ class _SignupCustomerScreenState
         ),
       ),
 
-      body: SafeArea(
+      body: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is AuthSuccess && state.user.role == 'customer') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const CustomerHomeScreen(),
+              ),
+            );
+          } else if (state is AuthFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        },
+      child: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(
             horizontal: 24,
@@ -323,7 +346,9 @@ class _SignupCustomerScreenState
           ),
         ),
       ),
+    )
     );
+
   }
 
   Widget _buildLabel(String label) {
