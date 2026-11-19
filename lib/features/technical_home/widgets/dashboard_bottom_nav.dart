@@ -1,15 +1,21 @@
+
+import 'package:final_depi/app/routes/route_screen_name.dart';
 import 'package:final_depi/core/theme/app_colors.dart';
+import 'package:final_depi/features/home/presentation/screens/incoming_requests_screen.dart';
 import 'package:flutter/material.dart';
 
 class DashboardBottomNav extends StatefulWidget {
-  const DashboardBottomNav({super.key});
+  /// 0 = Dashboard, 1 = Requests, 2 = Jobs, 3 = Profile
+  final int currentIndex;
+
+  const DashboardBottomNav({super.key, this.currentIndex = 0});
 
   @override
   State<DashboardBottomNav> createState() => _DashboardBottomNavState();
 }
 
 class _DashboardBottomNavState extends State<DashboardBottomNav> {
-  int selectedIndex = 0;
+  late int selectedIndex = widget.currentIndex;
 
   final List<IconData> icons = [
     Icons.grid_view_outlined,
@@ -19,6 +25,28 @@ class _DashboardBottomNavState extends State<DashboardBottomNav> {
   ];
 
   final List<String> labels = ['Dashboard', 'Requests', 'Jobs', 'Profile'];
+
+  void _go(int index) {
+    if (index == widget.currentIndex) return;
+    final navigator = Navigator.of(context);
+
+    switch (index) {
+      case 0:
+        navigator.pushReplacementNamed(RouteScreenName.technicianDashboard);
+        break;
+      case 1:
+        navigator.pushReplacement(
+          MaterialPageRoute(builder: (_) => const IncomingRequestsScreen()),
+        );
+        break;
+      case 2:
+        navigator.pushReplacementNamed(RouteScreenName.jobsHistory);
+        break;
+      case 3:
+        navigator.pushReplacementNamed(RouteScreenName.technicianProfile);
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +75,7 @@ class _DashboardBottomNavState extends State<DashboardBottomNav> {
                     setState(() {
                       selectedIndex = index;
                     });
+                    _go(index);
                   },
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
