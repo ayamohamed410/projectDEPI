@@ -1,4 +1,5 @@
 import 'package:final_depi/core/theme/app_colors.dart';
+import 'package:final_depi/features/customer_chat/screens/customer_chat_screen.dart';
 import 'package:flutter/material.dart';
 
 class TechnicianCardStatus extends StatelessWidget {
@@ -121,7 +122,14 @@ class TechnicianCardStatus extends StatelessWidget {
                   icon: Icons.chat_bubble_outline,
                   backgroundColor: const Color(0xFF0054D8),
                   foregroundColor: ColorsApp.whiteColor,
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CustomerChatScreen(),
+                      ),
+                    );
+                  },
                 ),
               ),
             ],
