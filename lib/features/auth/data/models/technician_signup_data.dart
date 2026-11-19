@@ -1,4 +1,3 @@
-
 class TechnicianSignupData {
   TechnicianSignupData._();
 

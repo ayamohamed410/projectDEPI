@@ -1,4 +1,7 @@
 import 'package:final_depi/app/routes/route_screen_name.dart';
+import 'package:final_depi/features/home/presentation/screens/incoming_requests_screen.dart';
+import 'package:final_depi/features/home/presentation/screens/request_details_screen.dart';
+import 'package:final_depi/features/technician_home/technician_home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../features/Technician/technician_dependencies.dart';
@@ -93,7 +96,7 @@ abstract class RoutesApp {
 
       case RouteScreenName.jobsHistory:
         return MaterialPageRoute(
-          builder: (context) => const jobsHistory(),
+          builder: (context) => const jobsHistory(), //
           settings: settings,
         );
 
@@ -105,11 +108,7 @@ abstract class RoutesApp {
 
       case RouteScreenName.technicianProfile:
         return MaterialPageRoute(
-          builder: (context) => BlocProvider(
-            create: (_) => TechnicianDependencies.getProfileBloc()
-              ..add(const ProfileStarted()),
-            child: const Sc22TechnicianProfile(),
-          ),
+          builder: (context) => Sc22TechnicianProfile(),
           settings: settings,
         );
 
@@ -146,6 +145,21 @@ abstract class RoutesApp {
       case RouteScreenName.ratingAndReview:
         return MaterialPageRoute(
           builder: (context) => const RatingReviewScreen(),
+          settings: settings,
+        );
+      case RouteScreenName.technicianHome:
+        return MaterialPageRoute(
+          builder: (context) => const TechnicianHome(),
+          settings: settings,
+        );
+      case RouteScreenName.incomingRequestsScreen:
+        return MaterialPageRoute(
+          builder: (context) => const IncomingRequestsScreen(),
+          settings: settings,
+        );
+      case RouteScreenName.requestDetailsScreen:
+        return MaterialPageRoute(
+          builder: (context) => const RequestDetailsScreen(),
           settings: settings,
         );
 

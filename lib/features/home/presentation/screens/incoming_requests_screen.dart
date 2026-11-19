@@ -39,7 +39,6 @@ class IncomingRequestsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // New / All filter
             Container(
               padding: const EdgeInsets.all(4),
               decoration: BoxDecoration(
@@ -78,7 +77,6 @@ class IncomingRequestsScreen extends StatelessWidget {
 
             const SizedBox(height: 14),
 
-            // Filters
             const Wrap(
               spacing: 7,
               runSpacing: 8,
@@ -149,7 +147,6 @@ class IncomingRequestsScreen extends StatelessWidget {
   }
 }
 
-// Filter chip
 class RequestFilter extends StatelessWidget {
   final String label;
 
@@ -172,7 +169,6 @@ class RequestFilter extends StatelessWidget {
   }
 }
 
-// Request card
 class RequestCard extends StatelessWidget {
   final String status;
   final String distance;

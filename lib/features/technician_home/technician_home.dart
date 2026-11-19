@@ -11,7 +11,6 @@ class TechnicianHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorsApp.background,
-      // Color.fromARGB(255, 230, 234, 241)
       appBar: AppBar(
         backgroundColor: ColorsApp.blue,
         title: Text("Technician Home", style: TextStyle(fontSize: 14)),
@@ -254,42 +253,40 @@ replacement""", style: TextStyle(color: Color(0xff44474D), fontSize: 14)),
                                 backgroundColor: Color(0xffDCE9FF),
                                 child: Text("TM"),
                               ),
-                              SizedBox(width: 12),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Tarek Mansour",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      "Tarek Mansour",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    "Apt 402, South Teseen St, New Cairo",
-                                    style: TextStyle(
-                                      color: Color(0xff44474D),
-                                      fontSize: 12,
+                                    const Text(
+                                      "Apt 402, South Teseen St, New Cairo",
+                                      style: TextStyle(
+                                        color: Color(0xff44474D),
+                                        fontSize: 12,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                              Spacer(),
-
                               IconButton(
                                 onPressed: () {},
-                                icon: Icon(
+                                icon: const Icon(
                                   Icons.phone_outlined,
                                   color: Colors.blue,
                                 ),
-                                highlightColor: Colors.white,
                               ),
                             ],
                           ),
                         ),
                         SizedBox(height: 18),
-                        // Job action
                         SizedBox(
                           width: double.infinity,
                           height: 46,
@@ -316,7 +313,6 @@ replacement""", style: TextStyle(color: Color(0xff44474D), fontSize: 14)),
                     ),
                   ),
                   SizedBox(height: 18),
-                  //*****************      Incoming Requests********************* */
                   Row(
                     children: [
                       Text(
@@ -435,49 +431,31 @@ replacement""", style: TextStyle(color: Color(0xff44474D), fontSize: 14)),
 
                         SizedBox(height: 13),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            ElevatedButton(
-                              onPressed: () {},
-
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: ColorsApp.blue,
-                                //                           elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                              child: Text(
-                                "Review Inbox",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () {},
+                                child: const Text(
+                                  "Review Inbox",
+                                  style: TextStyle(fontSize: 14),
                                 ),
                               ),
                             ),
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const IncomingRequestsScreen(),
-                                  ),
-                                );
-                              },
-
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue,
-                                //                           elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                              child: Text(
-                                "View Details",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const IncomingRequestsScreen(),
+                                    ),
+                                  );
+                                },
+                                child: const Text(
+                                  "View Details",
+                                  style: TextStyle(fontSize: 14),
                                 ),
                               ),
                             ),

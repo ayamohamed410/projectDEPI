@@ -73,7 +73,6 @@ class RequestDetailsScreen extends StatelessWidget {
 
             const SizedBox(height: 14),
 
-            // Request information
             DetailsCard(
               color: Colors.white,
 
@@ -131,7 +130,7 @@ class RequestDetailsScreen extends StatelessWidget {
 
             const SizedBox(height: 12),
 
-            // Customer description
+            //  description
             const DetailsCard(
               color: ColorsApp.blue,
 
@@ -156,7 +155,6 @@ class RequestDetailsScreen extends StatelessWidget {
 
             const SizedBox(height: 12),
 
-            // Customer photos
             DetailsCard(
               color: Colors.white,
 
@@ -185,54 +183,7 @@ class RequestDetailsScreen extends StatelessWidget {
 
             const SizedBox(height: 12),
 
-            // *******************Location*************************
-            DetailsCard(
-              color: Colors.white,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SectionTitle(
-                    icon: Icons.location_on_outlined,
-                    title: 'Location & Proximity',
-                  ),
-                  const SizedBox(height: 10),
-
-                  //********************map******************** */
-                  Container(
-                    height: 145,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: const Color(0xffE5EAD9),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-
-                    child: Icon(
-                      Icons.map_outlined,
-                      size: 75,
-                      color: Color(0xffA7B49A),
-                    ),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  const Text(
-                    'Fifth Settlement, District 3, New Cairo',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                  ),
-
-                  const SizedBox(height: 5),
-
-                  const Text(
-                    'Requested Immediately • Today (ASAP)',
-                    style: TextStyle(fontSize: 10, color: Colors.grey),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 12),
-
-            // Payment estimate
+            // الدفع
             DetailsCard(
               color: ColorsApp.blue,
               child: Column(
@@ -289,36 +240,98 @@ class RequestDetailsScreen extends StatelessWidget {
           ],
         ),
       ),
-
-      // Accept button
       bottomNavigationBar: SafeArea(
         child: Container(
           padding: const EdgeInsets.all(12),
           color: Colors.white,
-          child: SizedBox(
-            height: 48,
-            child: ElevatedButton.icon(
-              onPressed: () {
-                //*******************اظهار رساله  */
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Request accepted successfully!'),
+          child: Row(
+            children: [
+              // Decline Button
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () async {
+                    final result = await showDialog<bool>(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text('Decline Request'),
+                          content: const Text(
+                            'Are you sure you want to decline this request?',
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context, false);
+                              },
+                              child: const Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context, true);
+                              },
+                              child: const Text(
+                                'Decline',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+
+                    if (result == true) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Request declined successfully!'),
+                        ),
+                      );
+
+                      Navigator.pop(context);
+                    }
+                  },
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.red,
+                    side: const BorderSide(color: Colors.red),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
-                );
-              },
-              icon: const Icon(Icons.check_circle_outline),
-              label: const Text(
-                'Accept Request & Claim Job',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: detailsBlue,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  child: const Text(
+                    'Decline',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
-            ),
+
+              const SizedBox(width: 10),
+
+              //  Buttons
+              Expanded(
+                flex: 2,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Request accepted successfully!'),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.check_circle_outline),
+                  label: const Text(
+                    'Accept Request',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: detailsBlue,
+                    foregroundColor: Colors.white,
+                    minimumSize: const Size(double.infinity, 48),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -348,7 +361,6 @@ class DetailsTag extends StatelessWidget {
   }
 }
 
-// Photo placeholder
 class PhotoPlaceholder extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -378,7 +390,7 @@ class PhotoPlaceholder extends StatelessWidget {
   }
 }
 
-// Payment row
+//********************************** */
 class PaymentRow extends StatelessWidget {
   final String title;
   final String amount;
