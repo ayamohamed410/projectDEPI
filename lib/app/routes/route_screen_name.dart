@@ -21,4 +21,7 @@ class RouteScreenName {
   static const String customerSettings = '/customerSettings';
   static const String technicianDashboard = '/technicianDashboard';
   static const String ratingAndReview = '/ratingAndReview';
+  static const String technicianHome = '/technicianHome';
+  static const String incomingRequestsScreen = '/incomingRequestsScreen';
+  static const String requestDetailsScreen = '/requestDetailsScreen';
 }
