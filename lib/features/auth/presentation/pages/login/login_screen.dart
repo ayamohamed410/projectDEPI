@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/constants/assets_app.dart';
 import '../../../../../core/extensions/validate.dart';
 import '../../../../../core/services/Custom_button_widget.dart';
 import '../../../../../core/services/custom_text_field.dart';
 import '../../../../../core/theme/app_colors.dart';
+import '../../../../home/presentation/screens/customer_home_screen.dart';
+import '../../../../technical_home/screens/technician_dashboard_screen.dart';
+import '../../bloc/auth_bloc.dart';
+import '../../bloc/auth_event.dart';
 import '../forgetPassword/forget_password.dart';
 import '../register/selection_screen.dart';
-
+import '../../bloc/auth_state.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -27,12 +32,45 @@ class _LoginScreenState extends State<LoginScreen> {
     _passwordController.dispose();
     super.dispose();
   }
+  void _login() {
+    FocusScope.of(context).unfocus();
 
+    if (_formKey.currentState!.validate()) {
+      context.read<AuthBloc>().add(
+        LoginRequested(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+        ),
+      );
+    }
+  }
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
 
-    return Scaffold(
+    return BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is AuthLoading) {
+            // Login is processing
+          } else if (state is AuthSuccess) {
+            if (state.user.role == 'customer') {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CustomerHomeScreen(),
+                ),
+              );
+            } else if (state.user.role == 'technician') {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const TechnicianDashboardScreen(),
+                ),
+              );
+            }
+          }
+        },
+      child:Scaffold(
       backgroundColor: ColorsApp.whiteColor,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -202,21 +240,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 12),
 
                 // Login Button - UI Only
-                CustomButtonWidget(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            'Login is not connected yet.',
-                          ),
-                        ),
-                      );
-                    }
-                  },
-                  buttonText: 'Log In',
-                  height: 54,
-                ),
+              CustomButtonWidget(
+                onPressed: _login,
+                buttonText: 'Log In',
+                height: 54,
+              ),
 
                 const SizedBox(height: 24),
 
@@ -313,6 +341,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
+    ),
     );
   }
 }

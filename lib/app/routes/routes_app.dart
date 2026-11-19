@@ -1,6 +1,8 @@
 import 'package:final_depi/app/routes/route_screen_name.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../features/Technician/technician_dependencies.dart';
+import '../../features/Technician/presentation/bloc/profile/profile_event.dart';
 import '../../features/auth/presentation/pages/forgetPassword/forget_password.dart';
 import '../../features/auth/presentation/pages/login/login_screen.dart';
 import '../../features/auth/presentation/pages/register/selection_screen.dart';
@@ -11,14 +13,27 @@ import '../../features/home/presentation/screens/customer_home_screen.dart';
 import '../../features/home/presentation/screens/describe_problem_screen.dart';
 import '../../features/home/presentation/screens/ai_result_screen.dart';
 //screens technician
-import "../features/Technician/presentation/pages/jobsHistory.dart";
-import "../features/Technician/presentation/pages/TechnicianChat .dart";
-import "../features/Technician/presentation/pages/technician_profile.dart";
-import "../features/Technician/presentation/pages/technician_active_job.dart";
+import "../../features/Technician/presentation/pages/jobsHistory.dart";
+import "../../features/Technician/presentation/pages/TechnicianChat .dart";
+import "../../features/Technician/presentation/pages/technician_profile.dart";
+import "../../features/Technician/presentation/pages/technician_active_job.dart";
 
 import '../../features/onboarding/presentation/pages/onboarding_screen.dart';
 import '../../features/splash/presentation/splash_screen.dart';
 
+
+import '../../features/customer_chat/screens/customer_chat_screen.dart';
+import '../../features/customer_service_details/screens/customer_service_details_screen.dart';
+import '../../features/customer_settings/screens/customer_settings_screens.dart';
+import '../../features/technical_home/screens/technician_dashboard_screen.dart';
+import '../../features/rating_and_review/screens/rating_and_review_screen.dart';
+
+
+
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../features/Technician/technician_dependencies.dart';
+import '../../features/Technician/presentation/bloc/profile/profile_event.dart';
+import '../../features/home/presentation/screens/incoming_requests_screen.dart';
 abstract class RoutesApp {
   static Route<dynamic> onGeneratedRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -95,18 +110,61 @@ abstract class RoutesApp {
           settings: settings,
         );
 
-      case RouteScreenName.technicianProfile:
+    /*  case RouteScreenName.technicianProfile:
         return MaterialPageRoute(
-          builder: (context) => const Sc22TechnicianProfile(),
+          builder: (context) =>  Sc22TechnicianProfile(),
           settings: settings,
         );
-
+      */
+            case RouteScreenName.technicianProfile:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (_) => TechnicianDependencies.getProfileBloc()
+              ..add(const ProfileStarted()),
+            child: const Sc22TechnicianProfile(),
+          ),
+          settings: settings,
+        );
       case RouteScreenName.technicianChat:
         return MaterialPageRoute(
           builder: (context) => const TechnicianChat(),
           settings: settings,
         );
 
+        case RouteScreenName.customerChat:
+        return MaterialPageRoute(
+          builder: (context) => const CustomerChatScreen(),
+          settings: settings,
+        );
+
+      case RouteScreenName.customerServiceDetails:
+        return MaterialPageRoute(
+          builder: (context) => const CustomerServiceDetailsScreen(),
+          settings: settings,
+        );
+
+      case RouteScreenName.customerSettings:
+        return MaterialPageRoute(
+          builder: (context) => const CustomerSettingsScreen(),
+          settings: settings,
+        );
+
+      case RouteScreenName.technicianDashboard:
+        return MaterialPageRoute(
+          builder: (context) => const TechnicianDashboardScreen(),
+          settings: settings,
+        );
+
+      case RouteScreenName.ratingAndReview:
+        return MaterialPageRoute(
+          builder: (context) => const RatingReviewScreen(),
+          settings: settings,
+        );
+            case RouteScreenName.incomingRequests:
+        return MaterialPageRoute(
+          builder: (context) => const IncomingRequestsScreen(),
+          settings: settings,
+        );
       default:
         return MaterialPageRoute(
           builder: (context) => const SplashScreen(),

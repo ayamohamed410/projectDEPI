@@ -14,5 +14,11 @@ class RouteScreenName {
   static const String jobsHistory = '/jobsHistory';
   static const String technicianActiveJob = '/technicianActiveJob';
   static const String technicianProfile = '/technicianProfile';
+  static const String incomingRequests = '/incomingRequests';
   static const String technicianChat = '/technicianChat';
+  static const String customerChat = '/customerChat';
+  static const String customerServiceDetails = '/customerServiceDetails';
+  static const String customerSettings = '/customerSettings';
+  static const String technicianDashboard = '/technicianDashboard';
+  static const String ratingAndReview = '/ratingAndReview';
 }

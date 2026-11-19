@@ -3,11 +3,18 @@ import '../../../../../core/extensions/validate.dart';
 import '../../../../../core/services/Custom_button_widget.dart';
 import '../../../../../core/services/custom_text_field.dart';
 import '../../../../../core/theme/app_colors.dart';
+
+import '../../../../technical_home/screens/technician_dashboard_screen.dart';
 import '../../widgets/register/signup_section_label.dart';
 import '../../widgets/register/technician_signup_header.dart';
 import '../../widgets/register/technician_specialization_field.dart';
 import '../../widgets/register/technician_experience_field.dart';
 import '../login/login_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../bloc/auth_bloc.dart';
+import '../../bloc/auth_event.dart';
+import '../../bloc/auth_state.dart';
 
 class SignupTechnicianScreen extends StatefulWidget {
   const SignupTechnicianScreen({super.key});
@@ -76,21 +83,41 @@ class _SignupTechnicianScreenState
       return;
     }
 
-    // TODO: Connect Firebase Authentication.
-    // TODO: Save technician details in Cloud Firestore.
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text(
-          'Technician registration is not connected yet.',
-        ),
+    context.read<AuthBloc>().add(
+      SignUpTechnicianRequested(
+        name: _nameController.text.trim(),
+        email: _emailController.text.trim(),
+        phone: _phoneController.text.trim(),
+        password: _passwordController.text,
+        specialization: _selectedSpecialization!,
+        experience: _selectedExperience!,
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is AuthSuccess &&
+              state.user.role == 'technician') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                const TechnicianDashboardScreen(),
+              ),
+            );
+          } else if (state is AuthFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        },
+      child: Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -288,6 +315,7 @@ class _SignupTechnicianScreenState
           ),
         ),
       ),
-    );
+    ),
+        );
   }
 }
