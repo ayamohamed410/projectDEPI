@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/user_model.dart';
 import 'auth_remote_data_source.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final FirebaseAuth firebaseAuth;
@@ -101,6 +102,46 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     );
 
     return user;
+  }
+  @override
+  Future<UserModel> signInWithGoogle() async {
+    final GoogleSignIn googleSignIn = GoogleSignIn.instance;
+
+    await googleSignIn.initialize();
+
+    final GoogleSignInAccount googleUser =
+    await googleSignIn.authenticate();
+
+    final GoogleSignInAuthentication googleAuth =
+        googleUser.authentication;
+
+    final idToken = googleAuth.idToken;
+
+    if (idToken == null) {
+      throw Exception('Google authentication failed.');
+    }
+
+    final credential = GoogleAuthProvider.credential(
+      idToken: idToken,
+    );
+
+    final userCredential =
+    await firebaseAuth.signInWithCredential(credential);
+
+    final uid = userCredential.user!.uid;
+
+    final document =
+    await firestore.collection('users').doc(uid).get();
+
+    if (!document.exists) {
+      await firebaseAuth.signOut();
+      throw Exception('No account found. Please sign up first.');
+    }
+
+    return UserModel.fromJson({
+      ...document.data()!,
+      'id': uid,
+    });
   }
 
   @override

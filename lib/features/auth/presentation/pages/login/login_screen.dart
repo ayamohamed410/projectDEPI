@@ -325,12 +325,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   sideColor: const Color(0xFFD7DDE6),
                   textColor: ColorsApp.primaryColor,
                   onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          'Google Login is not connected yet.',
-                        ),
-                      ),
+                    context.read<AuthBloc>().add(
+                      const GoogleLoginRequested(),
                     );
                   },
                 ),

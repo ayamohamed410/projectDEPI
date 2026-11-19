@@ -7,6 +7,7 @@ import 'data/repositories/auth_repository_impl.dart';
 
 import 'domain/repositories/auth_repository.dart';
 import 'domain/usecases/login_usecase.dart';
+import 'domain/usecases/sign_in_with_google_usecase.dart';
 import 'domain/usecases/signup_customer_usecase.dart';
 import 'domain/usecases/signup_technician_usecase.dart';
 import 'domain/usecases/logout_usecase.dart';
@@ -37,6 +38,7 @@ class AuthDependencies {
     final signUpTechnicianUseCase =
     SignUpTechnicianUseCase(repository);
     final logoutUseCase = LogoutUseCase(repository);
+    final signInWithGoogleUseCase = SignInWithGoogleUseCase(repository);
 
     // BLoC
     return AuthBloc(
@@ -44,6 +46,7 @@ class AuthDependencies {
       signUpCustomerUseCase: signUpCustomerUseCase,
       signUpTechnicianUseCase: signUpTechnicianUseCase,
       logoutUseCase: logoutUseCase,
+      signInWithGoogleUseCase: signInWithGoogleUseCase,
     );
   }
 }
