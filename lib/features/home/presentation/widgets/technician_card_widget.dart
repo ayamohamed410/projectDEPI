@@ -242,7 +242,7 @@ class TechnicianCardWidget extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () {
                 // ******* Mohamed ************
-                Navigator.pop(
+                Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => TestNavigator()),
                 );
