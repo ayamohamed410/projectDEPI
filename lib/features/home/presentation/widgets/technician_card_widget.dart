@@ -1,4 +1,5 @@
 import 'package:final_depi/core/theme/app_colors.dart';
+import 'package:final_depi/features/test_navigator.dart';
 import 'package:flutter/material.dart';
 
 class TechnicianCardWidget extends StatelessWidget {
@@ -239,7 +240,13 @@ class TechnicianCardWidget extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                // ******* Mohamed ************
+                Navigator.pop(
+                  context,
+                  MaterialPageRoute(builder: (context) => TestNavigator()),
+                );
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF0F172A),
                 foregroundColor: Colors.white,
