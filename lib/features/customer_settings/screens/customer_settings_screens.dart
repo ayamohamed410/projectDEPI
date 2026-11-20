@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 import '../widgets/settings_profile_card.dart';
 
 class CustomerSettingsScreen extends StatefulWidget {
-  const CustomerSettingsScreen({super.key});
+  const CustomerSettingsScreen({super.key, this.onBack});
+
+  final VoidCallback? onBack;
 
   @override
   State<CustomerSettingsScreen> createState() => _CustomerSettingsScreenState();
@@ -36,7 +38,7 @@ class _CustomerSettingsScreenState extends State<CustomerSettingsScreen> {
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          onPressed: () {},
+          onPressed: widget.onBack ?? () => Navigator.of(context).maybePop(),
           icon: const Icon(Icons.arrow_back_ios, color: ColorsApp.primaryColor),
         ),
         title: const Text(

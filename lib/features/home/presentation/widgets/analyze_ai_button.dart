@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../screens/ai_result_screen.dart';
+import '../screens/describe_problem_screen.dart';
 
 class AnalyzeAiButton extends StatelessWidget {
   const AnalyzeAiButton({super.key});
@@ -12,7 +12,7 @@ class AnalyzeAiButton extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const AiResultScreen()),
+            MaterialPageRoute(builder: (context) => const DescribeProblemScreen()),
           );
         },
         style: ElevatedButton.styleFrom(

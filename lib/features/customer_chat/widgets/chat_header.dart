@@ -3,7 +3,9 @@ import 'package:final_depi/features/customer_request_status/screens/request_stat
 import 'package:flutter/material.dart';
 
 class ChatHeader extends StatelessWidget {
-  const ChatHeader({super.key});
+  const ChatHeader({super.key, this.onBack});
+
+  final VoidCallback? onBack;
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +17,14 @@ class ChatHeader extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             child: Row(
               children: [
-                const Icon(
-                  Icons.arrow_back_ios_new,
-                  size: 22,
-                  color: ColorsApp.primaryColor,
+                IconButton(
+                  tooltip: 'Back',
+                  onPressed: onBack ?? () => Navigator.of(context).maybePop(),
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new,
+                    size: 22,
+                    color: ColorsApp.primaryColor,
+                  ),
                 ),
                 const SizedBox(width: 22),
                 const Expanded(

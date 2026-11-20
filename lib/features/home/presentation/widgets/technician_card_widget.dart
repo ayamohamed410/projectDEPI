@@ -14,6 +14,7 @@ class TechnicianCardWidget extends StatelessWidget {
   final String statusText;
   final Color statusColor;
   final bool isElite;
+  final VoidCallback? onViewProfile;
 
   const TechnicianCardWidget({
     super.key,
@@ -28,6 +29,7 @@ class TechnicianCardWidget extends StatelessWidget {
     required this.statusText,
     required this.statusColor,
     this.isElite = false,
+    this.onViewProfile,
   });
 
   @override
@@ -134,7 +136,7 @@ class TechnicianCardWidget extends StatelessWidget {
                     const SizedBox(height: 4),
                     Row(
                       children: [
-                        const Icon(Icons.star, color: Colors.amber, size: 14),
+                        Icon(Icons.star, color: rating == '—' ? Colors.grey : Colors.amber, size: 14),
                         const SizedBox(width: 4),
                         Text(
                           rating,
@@ -144,7 +146,7 @@ class TechnicianCardWidget extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          ' ($reviewsCount)',
+                          reviewsCount == '—' ? ' (No ratings yet)' : ' ($reviewsCount)',
                           style: const TextStyle(
                             fontSize: 11,
                             color: Colors.grey,
@@ -160,7 +162,7 @@ class TechnicianCardWidget extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          '$distance ($eta)',
+                          distance == 'Not provided' ? 'Location unavailable' : '$distance ($eta)',
                           style: const TextStyle(
                             fontSize: 11,
                             color: Color(0xFF1D4ED8),
@@ -201,8 +203,8 @@ class TechnicianCardWidget extends StatelessWidget {
                             fontSize: 13,
                           ),
                         ),
-                        const Text(
-                          ' visit & labor',
+                        Text(
+                          price == 'Ask for quote' ? '' : ' visit & labor',
                           style: TextStyle(fontSize: 10, color: Colors.grey),
                         ),
                       ],
@@ -240,7 +242,7 @@ class TechnicianCardWidget extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: onViewProfile,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF0F172A),
                 foregroundColor: Colors.white,

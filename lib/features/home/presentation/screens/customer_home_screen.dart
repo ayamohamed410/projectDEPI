@@ -1,15 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../logic/customer_home_bloc.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/ai_triage_banner.dart';
-import '../widgets/in_progress_card.dart';
 import '../widgets/core_services_grid.dart';
+import 'package:final_depi/core/theme/app_colors.dart';
 
 class CustomerHomeScreen extends StatelessWidget {
   const CustomerHomeScreen({super.key});
 
   @override
+  Widget build(BuildContext context) => BlocProvider(
+    create: (_) => CustomerHomeBloc(
+      auth: FirebaseAuth.instance,
+      firestore: FirebaseFirestore.instance,
+    )..add(const LoadCustomerHome()),
+    child: const _CustomerHomeView(),
+  );
+}
+
+class _CustomerHomeView extends StatelessWidget {
+  const _CustomerHomeView();
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorsApp.background,
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -27,20 +45,23 @@ class CustomerHomeScreen extends StatelessWidget {
               const SizedBox(height: 16),
               const _SearchBarAndFilter(),
               const SizedBox(height: 16),
-              const InProgressCard(),
+              // Do not show a fake active order. Add a real orders BLoC later.
               const SizedBox(height: 24),
               const _SectionHeader(
-                title: 'Core Home Services',
+                title: 'Book a Service Manually',
                 actionText: 'View All >',
               ),
               const SizedBox(height: 12),
-              const CoreServicesGrid(),
+              BlocBuilder<CustomerHomeBloc, CustomerHomeState>(
+                builder: (context, state) => CoreServicesGrid(
+                  query: state is CustomerHomeLoaded ? state.searchQuery : '',
+                ),
+              ),
               const SizedBox(height: 24),
             ],
           ),
         ),
       ),
-      // bottomNavigationBar: const CustomBottomNavBar(),
     );
   }
 }
@@ -58,7 +79,7 @@ class _LocationAndTierRow extends StatelessWidget {
             Icon(Icons.location_on, color: Colors.blue, size: 18),
             SizedBox(width: 4),
             Text(
-              'New Cairo, Fifth Settlement',
+              'Location not set',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 color: Colors.black87,
@@ -99,28 +120,29 @@ class _WelcomeHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        Row(
-          children: [
-            Text(
-              'Good morning, Shahd ',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
+    return BlocBuilder<CustomerHomeBloc, CustomerHomeState>(
+      builder: (context, state) {
+        if (state is CustomerHomeLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (state is CustomerHomeFailure) {
+          return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(state.message, style: const TextStyle(color: Colors.red)),
+            TextButton(
+              onPressed: () => context.read<CustomerHomeBloc>().add(const LoadCustomerHome()),
+              child: const Text('Retry'),
             ),
-            Text('👋', style: TextStyle(fontSize: 20)),
-          ],
-        ),
-        SizedBox(height: 2),
-        Text(
-          'What needs fixing in your home today?',
-          style: TextStyle(color: Colors.grey, fontSize: 13),
-        ),
-      ],
+          ]);
+        }
+        final name = state is CustomerHomeLoaded ? state.customerName : 'there';
+        return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text('Hello, $name 👋',
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black)),
+          const SizedBox(height: 2),
+          const Text('What needs fixing in your home today?',
+            style: TextStyle(color: Colors.grey, fontSize: 13)),
+        ]);
+      },
     );
   }
 }
@@ -139,8 +161,9 @@ class _SearchBarAndFilter extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: Colors.grey.shade200),
             ),
-            child: const TextField(
-              decoration: InputDecoration(
+            child: TextField(
+              onChanged: (value) => context.read<CustomerHomeBloc>().add(SearchHomeServices(value)),
+              decoration: const InputDecoration(
                 hintText: 'Search plumber, AC repair, electrici...',
                 hintStyle: TextStyle(fontSize: 12, color: Colors.grey),
                 prefixIcon: Icon(Icons.search, color: Colors.grey, size: 20),
@@ -158,7 +181,11 @@ class _SearchBarAndFilter extends StatelessWidget {
           ),
           child: IconButton(
             icon: const Icon(Icons.tune, color: Color(0xFF1D4ED8)),
-            onPressed: () {},
+            onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Advanced filters are not available yet.')),
+            );
+          },
           ),
         ),
       ],
