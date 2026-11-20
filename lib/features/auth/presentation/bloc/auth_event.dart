@@ -67,6 +67,9 @@ class SignUpTechnicianRequested extends AuthEvent {
     experience,
   ];
 }
+class GoogleLoginRequested extends AuthEvent {
+  const GoogleLoginRequested();
+}
 
 // Logout
 class LogoutRequested extends AuthEvent {

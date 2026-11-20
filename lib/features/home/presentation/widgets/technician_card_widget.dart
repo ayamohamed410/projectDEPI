@@ -1,4 +1,5 @@
 import 'package:final_depi/core/theme/app_colors.dart';
+import 'package:final_depi/features/test_navigator.dart';
 import 'package:flutter/material.dart';
 
 class TechnicianCardWidget extends StatelessWidget {

@@ -7,6 +7,7 @@ class HelhalyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+  
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: '7elhaly - حلهالي',
@@ -19,5 +20,7 @@ class HelhalyApp extends StatelessWidget {
        onGenerateRoute: RoutesApp.onGeneratedRoute,
 
     );
+
+
   }
 }

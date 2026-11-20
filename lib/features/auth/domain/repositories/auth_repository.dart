@@ -21,6 +21,6 @@ abstract class AuthRepository {
     required String specialization,
     required String experience,
   });
-
+  Future<UserEntity> signInWithGoogle();
   Future<void> logout();
 }

@@ -1,4 +1,5 @@
 import 'package:final_depi/core/theme/app_colors.dart';
+import 'package:final_depi/features/rating_and_review/screens/rating_and_review_screen.dart';
 import 'package:flutter/material.dart';
 
 class CustomerActionsSection extends StatelessWidget {
@@ -12,7 +13,12 @@ class CustomerActionsSection extends StatelessWidget {
           width: double.infinity,
           height: 44,
           child: ElevatedButton.icon(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => RatingReviewScreen()),
+              );
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: ColorsApp.primaryColor,
               foregroundColor: ColorsApp.whiteColor,

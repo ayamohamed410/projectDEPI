@@ -1,3 +1,4 @@
+import 'package:final_depi/features/technician_home/technician_home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/constants/assets_app.dart';
@@ -6,7 +7,6 @@ import '../../../../../core/services/Custom_button_widget.dart';
 import '../../../../../core/services/custom_text_field.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../home/presentation/screens/customer_home_screen.dart';
-import '../../../../technical_home/screens/technician_dashboard_screen.dart';
 import '../../bloc/auth_bloc.dart';
 import '../../bloc/auth_event.dart';
 import '../forgetPassword/forget_password.dart';
@@ -32,6 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
     _passwordController.dispose();
     super.dispose();
   }
+
   void _login() {
     FocusScope.of(context).unfocus();
 
@@ -44,304 +45,286 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     }
   }
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
 
     return BlocListener<AuthBloc, AuthState>(
-        listener: (context, state) {
-          if (state is AuthLoading) {
-            // Login is processing
-          } else if (state is AuthSuccess) {
-            if (state.user.role == 'customer') {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const CustomerHomeScreen(),
-                ),
-              );
-            } else if (state.user.role == 'technician') {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const TechnicianDashboardScreen(),
-                ),
-              );
-            }
-          }
-        },
-      child:Scaffold(
-      backgroundColor: ColorsApp.whiteColor,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 24,
-            vertical: 20,
-          ),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(height: height * 0.025),
-
-                // Logo
-                Center(
-                  child: Image.asset(
-                    AssetsApp.logoSplash,
-                    height: height * 0.14,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-
-                const SizedBox(height: 8),
-
-                // App Name
-                const Text(
-                  '7elhaly',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 34,
-                    fontWeight: FontWeight.w800,
-                    color: ColorsApp.primaryColor,
-                    letterSpacing: 0.5,
-                  ),
-                ),
-
-                const SizedBox(height: 30),
-
-                // Welcome Title
-                const Text(
-                  'Welcome Back!',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontSize: 27,
-                    fontWeight: FontWeight.w800,
-                    color: ColorsApp.primaryColor,
-                  ),
-                ),
-
-                const SizedBox(height: 8),
-
-                const Text(
-                  'Log in to continue to your account.',
-                  style: TextStyle(
-                    fontSize: 15,
-                    height: 1.5,
-                    color: ColorsApp.greyColor,
-                  ),
-                ),
-
-                const SizedBox(height: 28),
-
-                // Email Label
-                const Text(
-                  'Email Address',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: ColorsApp.primaryColor,
-                  ),
-                ),
-
-                const SizedBox(height: 9),
-
-                // Email Field
-                CustomTextField(
-                  controller: _emailController,
-                  hint: 'Enter your email address',
-                  hintColor: ColorsApp.greyColor,
-                  prefixIcon: const Icon(
-                    Icons.mail_outline,
-                    color: Color(0xFF8296B0),
-                  ),
-                  onValidate: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Please enter your e-mail';
-                    }
-
-                    if (!Validations.validateEmail(value.trim())) {
-                      return 'Please enter a valid e-mail';
-                    }
-
-                    return null;
-                  },
-                ),
-
-                const SizedBox(height: 20),
-
-                // Password Label
-                const Text(
-                  'Password',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: ColorsApp.primaryColor,
-                  ),
-                ),
-
-                const SizedBox(height: 9),
-
-                // Password Field
-                CustomTextField(
-                  controller: _passwordController,
-                  isPassword: true,
-                  maxLines: 1,
-                  hint: 'Enter your password',
-                  hintColor: ColorsApp.greyColor,
-                  prefixIcon: Icon(
-                    Icons.lock_outline,
-                    color: Color(0xFF8296B0),
-
-                    //color: ColorsApp.greyColor,
-                  ),
-                  onValidate: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your password';
-                    }
-
-                    if (!Validations.validatePassword(value)) {
-                      return 'Please enter a valid password';
-                    }
-
-                    return null;
-                  },
-                ),
-
-                // Forgot Password
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                          const ForgetPasswordScreen(),
-                        ),
-                      );
-                    },
-                    style: TextButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 10,
-                      ),
-                      foregroundColor: ColorsApp.BlueColor,
-                    ),
-                    child: const Text(
-                      'Forgot Password?',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 12),
-
-                // Login Button - UI Only
-              CustomButtonWidget(
-                onPressed: _login,
-                buttonText: 'Log In',
-                height: 54,
+      listener: (context, state) {
+        if (state is AuthLoading) {
+          // Login is processing
+        } else if (state is AuthSuccess) {
+          if (state.user.role == 'customer') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const CustomerHomeScreen(),
               ),
+            );
+          } else if (state.user.role == 'technician') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const TechnicianHome()),
+            );
+          }
+        }
+      },
+      child: Scaffold(
+        backgroundColor: ColorsApp.whiteColor,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(height: height * 0.025),
 
-                const SizedBox(height: 24),
+                  // Logo
+                  Center(
+                    child: Image.asset(
+                      AssetsApp.logoSplash,
+                      height: height * 0.14,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
 
-                // Create Account
-                Center(
-                  child: Wrap(
-                    alignment: WrapAlignment.center,
-                    children: [
-                      const Text(
-                        "Don't have an account? ",
+                  const SizedBox(height: 8),
+
+                  // App Name
+                  const Text(
+                    '7elhaly',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 34,
+                      fontWeight: FontWeight.w800,
+                      color: ColorsApp.primaryColor,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+
+                  const SizedBox(height: 30),
+
+                  // Welcome Title
+                  const Text(
+                    'Welcome Back!',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontSize: 27,
+                      fontWeight: FontWeight.w800,
+                      color: ColorsApp.primaryColor,
+                    ),
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  const Text(
+                    'Log in to continue to your account.',
+                    style: TextStyle(
+                      fontSize: 15,
+                      height: 1.5,
+                      color: ColorsApp.greyColor,
+                    ),
+                  ),
+
+                  const SizedBox(height: 28),
+
+                  // Email Label
+                  const Text(
+                    'Email Address',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: ColorsApp.primaryColor,
+                    ),
+                  ),
+
+                  const SizedBox(height: 9),
+
+                  // Email Field
+                  CustomTextField(
+                    controller: _emailController,
+                    hint: 'Enter your email address',
+                    hintColor: ColorsApp.greyColor,
+                    prefixIcon: const Icon(
+                      Icons.mail_outline,
+                      color: Color(0xFF8296B0),
+                    ),
+                    onValidate: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Please enter your e-mail';
+                      }
+
+                      if (!Validations.validateEmail(value.trim())) {
+                        return 'Please enter a valid e-mail';
+                      }
+
+                      return null;
+                    },
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Password Label
+                  const Text(
+                    'Password',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: ColorsApp.primaryColor,
+                    ),
+                  ),
+
+                  const SizedBox(height: 9),
+
+                  // Password Field
+                  CustomTextField(
+                    controller: _passwordController,
+                    isPassword: true,
+                    maxLines: 1,
+                    hint: 'Enter your password',
+                    hintColor: ColorsApp.greyColor,
+                    prefixIcon: Icon(
+                      Icons.lock_outline,
+                      color: Color(0xFF8296B0),
+
+                      //color: ColorsApp.greyColor,
+                    ),
+                    onValidate: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your password';
+                      }
+
+                      if (!Validations.validatePassword(value)) {
+                        return 'Please enter a valid password';
+                      }
+
+                      return null;
+                    },
+                  ),
+
+                  // Forgot Password
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ForgetPasswordScreen(),
+                          ),
+                        );
+                      },
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        foregroundColor: ColorsApp.BlueColor,
+                      ),
+                      child: const Text(
+                        'Forgot Password?',
                         style: TextStyle(
                           fontSize: 14,
-                          color: ColorsApp.primaryColor,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                              const SelectionScreen(),
-                            ),
-                          );
-                        },
-                        child: const Text(
-                          'Create Account',
+                    ),
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  // Login Button - UI Only
+                  CustomButtonWidget(
+                    onPressed: _login,
+                    buttonText: 'Log In',
+                    height: 54,
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  // Create Account
+                  Center(
+                    child: Wrap(
+                      alignment: WrapAlignment.center,
+                      children: [
+                        const Text(
+                          "Don't have an account? ",
                           style: TextStyle(
                             fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: ColorsApp.BlueColor,
+                            color: ColorsApp.primaryColor,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const SelectionScreen(),
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            'Create Account',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: ColorsApp.BlueColor,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 25),
+
+                  // OR Divider
+                  const Row(
+                    children: [
+                      Expanded(
+                        child: Divider(color: Color(0xFFE0E5EC), thickness: 1),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          'OR',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: ColorsApp.greyColor,
                           ),
                         ),
                       ),
+                      Expanded(
+                        child: Divider(color: Color(0xFFE0E5EC), thickness: 1),
+                      ),
                     ],
                   ),
-                ),
 
-                const SizedBox(height: 25),
+                  const SizedBox(height: 22),
 
-                // OR Divider
-                const Row(
-                  children: [
-                    Expanded(
-                      child: Divider(
-                        color: Color(0xFFE0E5EC),
-                        thickness: 1,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: Text(
-                        'OR',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: ColorsApp.greyColor,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Divider(
-                        color: Color(0xFFE0E5EC),
-                        thickness: 1,
-                      ),
-                    ),
-                  ],
-                ),
+                  // Google Login Button - UI Only
+                  CustomButtonWidget(
+                    buttonText: 'Continue with Google',
+                    icon: AssetsApp.googleIcon,
+                    height: 54,
+                    backgroundColor: ColorsApp.whiteColor,
+                    sideColor: const Color(0xFFD7DDE6),
+                    textColor: ColorsApp.primaryColor,
+                    onPressed: () {
+                      context.read<AuthBloc>().add(
+                        const GoogleLoginRequested(),
+                      );
+                    },
+                  ),
 
-                const SizedBox(height: 22),
-
-                // Google Login Button - UI Only
-                CustomButtonWidget(
-                  buttonText: 'Continue with Google',
-                  icon: AssetsApp.googleIcon,
-                  height: 54,
-                  backgroundColor: ColorsApp.whiteColor,
-                  sideColor: const Color(0xFFD7DDE6),
-                  textColor: ColorsApp.primaryColor,
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          'Google Login is not connected yet.',
-                        ),
-                      ),
-                    );
-                  },
-                ),
-
-                const SizedBox(height: 16),
-              ],
+                  const SizedBox(height: 16),
+                ],
+              ),
             ),
           ),
         ),
       ),
-    ),
     );
   }
 }

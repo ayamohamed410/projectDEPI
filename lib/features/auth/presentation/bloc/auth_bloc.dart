@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/usecases/login_usecase.dart';
+import '../../domain/usecases/sign_in_with_google_usecase.dart';
 import '../../domain/usecases/signup_customer_usecase.dart';
 import '../../domain/usecases/signup_technician_usecase.dart';
 import '../../domain/usecases/logout_usecase.dart';
@@ -13,12 +14,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SignUpCustomerUseCase signUpCustomerUseCase;
   final SignUpTechnicianUseCase signUpTechnicianUseCase;
   final LogoutUseCase logoutUseCase;
-
+  final SignInWithGoogleUseCase signInWithGoogleUseCase;
   AuthBloc({
     required this.loginUseCase,
     required this.signUpCustomerUseCase,
     required this.signUpTechnicianUseCase,
     required this.logoutUseCase,
+    required this.signInWithGoogleUseCase,
   }) : super(const AuthInitial()) {
     // Login
     on<LoginRequested>((event, emit) async {
@@ -82,6 +84,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await logoutUseCase();
 
         emit(const AuthLogoutSuccess());
+      } catch (e) {
+        emit(AuthFailure(e.toString()));
+      }
+    });
+    // Google Login
+    on<GoogleLoginRequested>((event, emit) async {
+      emit(const AuthLoading());
+
+      try {
+        final user = await signInWithGoogleUseCase();
+
+        emit(AuthSuccess(user));
       } catch (e) {
         emit(AuthFailure(e.toString()));
       }
