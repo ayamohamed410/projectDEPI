@@ -11,8 +11,7 @@ abstract class ActiveJobEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-/// Opens the screen. [jobId] may be null: then the technician's active job
-/// is used.
+
 class LoadActiveJob extends ActiveJobEvent {
   final String? jobId;
   const LoadActiveJob(this.jobId);
@@ -21,7 +20,7 @@ class LoadActiveJob extends ActiveJobEvent {
   List<Object?> get props => [jobId];
 }
 
-/// Fired by the Firestore stream every time the job document changes.
+
 class JobUpdated extends ActiveJobEvent {
   final JobModel? job;
   const JobUpdated(this.job);
@@ -30,7 +29,7 @@ class JobUpdated extends ActiveJobEvent {
   List<Object?> get props => [job];
 }
 
-/// Moves the job to the next step (On Way -> Arrived -> In Progress).
+
 class AdvanceStatus extends ActiveJobEvent {
   const AdvanceStatus();
 }
@@ -64,7 +63,8 @@ class ReportIssueRequested extends ActiveJobEvent {
   List<Object?> get props => [reason];
 }
 
-/// Fired every 30 seconds to refresh the "N mins" counter.
+
+
 class TimerTicked extends ActiveJobEvent {
   const TimerTicked();
 }
@@ -73,7 +73,7 @@ class RetryPressed extends ActiveJobEvent {
   const RetryPressed();
 }
 
-/// The screen already showed the SnackBar, clear the one-shot message.
+
 class MessageShown extends ActiveJobEvent {
   const MessageShown();
 }

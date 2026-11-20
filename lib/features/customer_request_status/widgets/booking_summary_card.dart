@@ -1,4 +1,5 @@
 import 'package:final_depi/core/theme/app_colors.dart';
+import 'package:final_depi/features/customer_service_details/screens/customer_service_details_screen.dart';
 import 'package:flutter/material.dart';
 
 class BookingSummaryCard extends StatelessWidget {
@@ -28,7 +29,14 @@ class BookingSummaryCard extends StatelessWidget {
               ),
 
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CustomerServiceDetailsScreen(),
+                    ),
+                  );
+                },
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.zero,
                   minimumSize: Size.zero,

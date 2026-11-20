@@ -8,12 +8,10 @@ import 'package:final_depi/features/Technician/presentation/bloc/chat/chat_event
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:speech_to_text/speech_to_text.dart' as stt;
-import 'package:url_launcher/url_launcher.dart';
 
 import '/core/theme/app_styles.dart';
 import '../../../jobs/job_model.dart';
@@ -80,7 +78,7 @@ class _TechnicianChatViewState extends State<_TechnicianChatView> {
     );
   }
 
-  // ===================== الكاميرا / المعرض (بنفس أسلوب Active Job) =====================
+  
 
   Future<void> _pickChatPhoto(String jobId) async {
     if (_isUploading) return;
@@ -141,8 +139,6 @@ class _TechnicianChatViewState extends State<_TechnicianChatView> {
     }
   }
 
-  // ===================== إرفاق الملفات (بنفس أسلوب قراءة bytes الآمن) =====================
-
   Future<void> _pickChatFile(String jobId) async {
     if (_isUploading) return;
 
@@ -181,7 +177,7 @@ class _TechnicianChatViewState extends State<_TechnicianChatView> {
     }
   }
 
-  // ===================== تحويل الصوت لنص =====================
+  // =====================voice=====================
 
   Future<void> _toggleListening() async {
     if (_isListening) {
@@ -225,48 +221,6 @@ class _TechnicianChatViewState extends State<_TechnicianChatView> {
     }
   }
 
-  // ===================== الاتصال وتفاصيل الأوردر =====================
-
-  void _showCallDialog(String? phone) {
-    final p = phone ?? '';
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Customer Phone'),
-        content: Text(p.isNotEmpty ? p : 'No phone number available'),
-        actions: [
-          if (p.isNotEmpty) ...[
-            TextButton(
-              onPressed: () {
-                Clipboard.setData(ClipboardData(text: p));
-                Navigator.pop(ctx);
-                _showSnack('Phone number copied to clipboard');
-              },
-              child: const Text('Copy'),
-            ),
-            TextButton(
-              onPressed: () async {
-                Navigator.pop(ctx);
-                var ok = false;
-                try {
-                  ok = await launchUrl(Uri(scheme: 'tel', path: p));
-                } catch (_) {}
-                if (!ok && mounted) {
-                  _showSnack('Cannot open the dialer on this device');
-                }
-              },
-              child: const Text('Call'),
-            ),
-          ],
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('Close'),
-          ),
-        ],
-      ),
-    );
-  }
-
   void _showJobDetails(JobModel job) {
     showModalBottomSheet(
       context: context,
@@ -302,7 +256,7 @@ class _TechnicianChatViewState extends State<_TechnicianChatView> {
     );
   }
 
-  // ===================== عرض محتوى الرسالة =====================
+  // ===================== message =====================
 
   Widget _buildMessageContent(dynamic msg, bool isMe) {
     final String rawText = (msg.text ?? '').toString();
@@ -549,9 +503,6 @@ class _TechnicianChatViewState extends State<_TechnicianChatView> {
 
         final job = state.job!;
         final customerName = state.customerData?['name'] ?? job.customerName;
-        final customerPhone = job.customerPhone.isNotEmpty
-            ? job.customerPhone
-            : state.customerData?['phone'] as String?;
         final currentUid = FirebaseAuth.instance.currentUser?.uid;
 
         return Scaffold(
@@ -667,19 +618,6 @@ class _TechnicianChatViewState extends State<_TechnicianChatView> {
                                       ],
                                     ),
                                   ],
-                                ),
-                                CircleAvatar(
-                                  backgroundColor: Colors.blue.shade50,
-                                  radius: 22,
-                                  child: IconButton(
-                                    icon: const Icon(
-                                      Icons.phone_outlined,
-                                      color: Colors.blue,
-                                      size: 20,
-                                    ),
-                                    onPressed: () =>
-                                        _showCallDialog(customerPhone),
-                                  ),
                                 ),
                               ],
                             ),

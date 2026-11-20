@@ -1,6 +1,6 @@
 import 'parse_utils.dart';
 
-/// The only allowed values of `jobs/{id}.status`.
+
 class JobStatus {
   JobStatus._();
 
@@ -13,10 +13,11 @@ class JobStatus {
   static const cancelled = 'cancelled';
   static const disputed = 'disputed';
 
-  /// The technician is currently working on this job.
+
+
   static const active = [accepted, onWay, arrived, inProgress];
 
-  /// Happy path, in order (used by the timeline on the Active Job screen).
+
   static const flow = [accepted, onWay, arrived, inProgress, completed];
 
   /// The status after [current] on the happy path, or null at the end.
@@ -27,8 +28,7 @@ class JobStatus {
   }
 }
 
-/// One line in "Logged Parts & Hardware". [price] is the LINE total
-/// (what the screen shows next to the item), not the unit price.
+
 class JobPart {
   final String name;
   final int qty;
@@ -57,7 +57,7 @@ class JobPart {
       };
 }
 
-/// One entry of `statusHistory` (feeds the Service Timeline).
+
 class StatusEvent {
   final String status;
   final DateTime? at;
@@ -137,7 +137,7 @@ class JobModel {
       diagnosisTitle: asString(m['diagnosisTitle']),
       problemDescription: asString(m['problemDescription']),
 
-    //  status: asString(m['status'], JobStatus.pending),
+  
 
             status: asString(m['status'], JobStatus.pending).trim(),
       statusHistory: ((m['statusHistory'] as List?) ?? const [])

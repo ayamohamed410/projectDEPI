@@ -5,7 +5,7 @@ import '../../../../../core/services/Custom_button_widget.dart';
 import '../../../../../core/services/custom_text_field.dart';
 import '../../../../../core/theme/app_colors.dart';
 
-
+import '../../../../technical_home/screens/technician_dashboard_screen.dart';
 import '../../widgets/register/signup_section_label.dart';
 import '../../widgets/register/technician_signup_header.dart';
 import '../../widgets/register/technician_specialization_field.dart';

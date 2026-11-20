@@ -31,7 +31,7 @@ class _Sc22TechnicianProfileState extends State<Sc22TechnicianProfile> {
 
   @override
   Widget build(BuildContext context) {
-    // BlocListener: بيسمع لحالة الـ logout وبعدين يرجع لشاشة الـ login
+
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthLogoutSuccess) {
@@ -46,7 +46,7 @@ class _Sc22TechnicianProfileState extends State<Sc22TechnicianProfile> {
       },
       child: Scaffold(
         appBar: _buildAppBar(),
-        // BlocBuilder: بيرسم الشاشة حسب حالة الـ ProfileBloc
+
         body: BlocBuilder<ProfileBloc, ProfileState>(
           builder: (context, state) {
             if (state is ProfileLoading || state is ProfileInitial) {
@@ -78,7 +78,7 @@ class _Sc22TechnicianProfileState extends State<Sc22TechnicianProfile> {
     );
   }
 
-  // ---------------- AppBar ----------------
+
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
       backgroundColor: Colors.white,

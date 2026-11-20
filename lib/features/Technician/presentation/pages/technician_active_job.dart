@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '/core/theme/app_styles.dart';
 import '../../../../app/routes/route_screen_name.dart';
@@ -17,8 +16,6 @@ import '../widgets/container.dart';
 import '../widgets/custom_card_container.dart';
 import '../widgets/timelinestep.dart';
 import 'TechnicianChat .dart';
-
-// ============================================================ helpers
 
 String _money(double v) =>
     v == v.roundToDouble() ? v.toStringAsFixed(0) : v.toStringAsFixed(2);
@@ -49,10 +46,6 @@ String _statusLabel(String status) {
   }
 }
 
-// ============================================================== page
-
-/// [jobId] is optional: when it is null the technician's active job is used
-/// (so the route in routes_app.dart can keep calling `const TechnicianActiveJob()`).
 class TechnicianActiveJob extends StatelessWidget {
   final String? jobId;
   const TechnicianActiveJob({super.key, this.jobId});
@@ -166,8 +159,6 @@ class _ActiveJobView extends StatelessWidget {
   }
 }
 
-// ============================================================== body
-
 class _ActiveJobBody extends StatelessWidget {
   final ActiveJobState state;
   const _ActiveJobBody({required this.state});
@@ -209,8 +200,6 @@ class _ActiveJobBody extends StatelessWidget {
       ),
     );
   }
-
-  // ------------------------------------------------------ 1. header bar
 
   Widget _headerBar() {
     return Container(
@@ -272,8 +261,6 @@ class _ActiveJobBody extends StatelessWidget {
       ),
     );
   }
-
-  // --------------------------------------------- 2. customer + chat/call
 
   Widget _customerCard(BuildContext context) {
     return Container(
@@ -364,57 +351,12 @@ class _ActiveJobBody extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () => _call(context, job.customerPhone),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.bluenewcontainer,
-                    elevation: 0,
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Icon(Icons.call, size: 24, color: AppColors.primary),
-                        SizedBox(height: 6),
-                        Text('Call', style: TextStyle(color: Colors.black)),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
             ],
           ),
         ],
       ),
     );
   }
-
-  Future<void> _call(BuildContext context, String phone) async {
-    final messenger = ScaffoldMessenger.of(context);
-    final number = phone.trim();
-    if (number.isEmpty) {
-      messenger.showSnackBar(
-        const SnackBar(content: Text('No phone number available')),
-      );
-      return;
-    }
-    try {
-      final ok = await launchUrl(Uri(scheme: 'tel', path: number));
-      if (!ok) {
-        messenger.showSnackBar(
-          const SnackBar(content: Text('Could not open the dialer')),
-        );
-      }
-    } catch (_) {
-      messenger.showSnackBar(
-        const SnackBar(content: Text('Could not open the dialer')),
-      );
-    }
-  }
-
-  // ----------------------------- 3. status buttons + service timeline
 
   Widget _progressionAndTimeline(BuildContext context) {
     return buildCustomContainer(
@@ -502,8 +444,6 @@ class _ActiveJobBody extends StatelessWidget {
     );
   }
 
-  /// [index] = position of the step in JobStatus.flow
-  /// (1 on_way, 2 arrived, 3 in_progress, 4 completed).
   Widget _stepButton(
     BuildContext context,
     int index,
@@ -625,8 +565,6 @@ class _ActiveJobBody extends StatelessWidget {
     }
     return widgets;
   }
-
-  // ------------------------------- 4. diagnosis, parts, photos, billing
 
   Widget _detailsCard(BuildContext context) {
     return CustomCardContainer(
@@ -942,8 +880,6 @@ class _ActiveJobBody extends StatelessWidget {
     );
   }
 
-  // ------------------------------------------------ 5. complete / report
-
   Widget _completeSection(BuildContext context) {
     final hint = state.completeHint;
     return Column(
@@ -1077,9 +1013,6 @@ class _ActiveJobBody extends StatelessWidget {
   }
 }
 
-// ======================================================= small widgets
-
-/// Chat button with the unread-messages badge.
 class _ChatButton extends StatefulWidget {
   final String jobId;
   final VoidCallback onPressed;
@@ -1157,8 +1090,6 @@ class _ChatButtonState extends State<_ChatButton> {
   }
 }
 
-/// One photo box (Before / After). Photos are stored as "data:image/..."
-/// strings (Firebase Storage is not enabled), old links still work.
 class _PhotoSlot extends StatelessWidget {
   final String label;
   final String? url;
@@ -1279,7 +1210,6 @@ class _PhotoSlot extends StatelessWidget {
   }
 }
 
-/// Bottom sheet to log a part. Returns a [JobPart] (price = LINE total).
 class _AddPartSheet extends StatefulWidget {
   const _AddPartSheet();
 
@@ -1397,7 +1327,6 @@ class _AddPartSheetState extends State<_AddPartSheet> {
   }
 }
 
-/// Dialog for "Report Issue / Delay". Returns the reason text.
 class _ReportDialog extends StatefulWidget {
   const _ReportDialog();
 
