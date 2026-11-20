@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CoreServicesGrid extends StatelessWidget {
-  const CoreServicesGrid({super.key});
+  final String query;
+  const CoreServicesGrid({super.key, this.query = ''});
 
   @override
   Widget build(BuildContext context) {
@@ -44,10 +45,21 @@ class CoreServicesGrid extends StatelessWidget {
       },
     ];
 
+    final results = services.where((service) {
+      final queryText = query.trim().toLowerCase();
+      if (queryText.isEmpty) return true;
+      return ('${service['title']} ${service['subtitle']}').toLowerCase().contains(queryText);
+    }).toList();
+    if (results.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(vertical: 20),
+        child: Center(child: Text('No matching services found.')),
+      );
+    }
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: services.length,
+      itemCount: results.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: 10,
@@ -55,7 +67,7 @@ class CoreServicesGrid extends StatelessWidget {
         childAspectRatio: 1.5,
       ),
       itemBuilder: (context, index) {
-        final service = services[index];
+        final service = results[index];
         return Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(

@@ -1,3 +1,4 @@
+import '../../features/home/logic/ai_analysis_bloc.dart';
 import 'package:final_depi/app/routes/route_screen_name.dart';
 import 'package:flutter/material.dart';
 
@@ -86,7 +87,9 @@ abstract class RoutesApp {
 
       case RouteScreenName.aiResult:
         return MaterialPageRoute(
-          builder: (context) => const AiResultScreen(),
+          builder: (context) => settings.arguments is AiReport
+              ? AiResultScreen(report: settings.arguments as AiReport)
+              : const DescribeProblemScreen(),
           settings: settings,
         );
 
