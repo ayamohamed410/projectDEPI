@@ -240,13 +240,7 @@ class TechnicianCardWidget extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {
-                // ******* Mohamed ************
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => TestNavigator()),
-                );
-              },
+              onPressed: () {},
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF0F172A),
                 foregroundColor: Colors.white,
