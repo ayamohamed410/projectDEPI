@@ -7,7 +7,9 @@ import 'package:final_depi/features/customer_request_status/widgets/technician_c
 import 'package:flutter/material.dart';
 
 class RequestStatusScreen extends StatelessWidget {
-  const RequestStatusScreen({super.key});
+  const RequestStatusScreen({super.key, this.onBack});
+
+  final VoidCallback? onBack;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,7 @@ class RequestStatusScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            _buildAppBar(),
+            _buildAppBar(context),
 
             Expanded(
               child: SingleChildScrollView(
@@ -47,13 +49,13 @@ class RequestStatusScreen extends StatelessWidget {
   }
 
   // Appbar
-  Widget _buildAppBar() {
+  Widget _buildAppBar(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Row(
         children: [
           IconButton(
-            onPressed: () {},
+            onPressed: onBack ?? () => Navigator.of(context).maybePop(),
             icon: const Icon(Icons.arrow_back_ios_new),
             iconSize: 20,
             color: ColorsApp.primaryColor,

@@ -13,7 +13,7 @@ import '../../features/auth/presentation/pages/register/selection_screen.dart';
 import '../../features/auth/presentation/pages/register/signup_customer.dart';
 import '../../features/auth/presentation/pages/register/signup_technician.dart';
 import '../../features/home/presentation/screens/ai_result_screen.dart';
-import '../../features/home/presentation/screens/customer_home_screen.dart';
+import '../../features/home/presentation/screens/customer_shell.dart';
 import '../../features/home/presentation/screens/describe_problem_screen.dart';
 import '../../features/home/presentation/screens/incoming_requests_screen.dart';
 //screens technician
@@ -78,7 +78,7 @@ abstract class RoutesApp {
 
       case RouteScreenName.customerHome:
         return MaterialPageRoute(
-          builder: (context) => const CustomerHomeScreen(),
+          builder: (context) => const CustomerShell(),
           settings: settings,
         );
 

@@ -114,9 +114,13 @@ class AiResultScreen extends StatelessWidget {
                 Wrap(spacing: 7, runSpacing: 8,
                   children: report.parts.map((part) => _pill(part, Icons.handyman_outlined,
                     const Color(0xFFEAF0FF), _blue)).toList()),
-                const SizedBox(height: 14),
-                const Text('Photos are not included in this demo analysis.',
-                    style: TextStyle(fontSize: 11, color: _muted)),
+                if (report.isDemo) ...[
+                  const SizedBox(height: 14),
+                  const Text(
+                    'Demo report: photo analysis is not available in this example.',
+                    style: TextStyle(fontSize: 11, color: _muted),
+                  ),
+                ],
               ]),
               const SizedBox(height: 12),
               _surface(children: [

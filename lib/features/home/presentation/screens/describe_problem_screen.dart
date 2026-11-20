@@ -12,19 +12,23 @@ import 'ai_result_screen.dart';
 
 /// Screen 8: images and text are sent to the secure Firebase Function.
 class DescribeProblemScreen extends StatelessWidget {
-  const DescribeProblemScreen({super.key});
+  const DescribeProblemScreen({super.key, this.initialCategory = 'Plumbing'});
+
+  final String initialCategory;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<AiAnalysisBloc>(
       create: (_) => AiAnalysisBloc(FirebaseAiAnalysisRepository()),
-      child: const _ProblemForm(),
+      child: _ProblemForm(initialCategory: initialCategory),
     );
   }
 }
 
 class _ProblemForm extends StatefulWidget {
-  const _ProblemForm();
+  const _ProblemForm({required this.initialCategory});
+
+  final String initialCategory;
 
   @override
   State<_ProblemForm> createState() => _ProblemFormState();
@@ -46,6 +50,7 @@ class _ProblemFormState extends State<_ProblemForm> {
   @override
   void initState() {
     super.initState();
+    _category = widget.initialCategory;
     _description.addListener(_refreshCharacterCount);
   }
 

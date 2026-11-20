@@ -9,7 +9,9 @@ import 'package:image_picker/image_picker.dart';
 
 
 class CustomerChatScreen extends StatefulWidget {
-  const CustomerChatScreen({super.key});
+  const CustomerChatScreen({super.key, this.onBack});
+
+  final VoidCallback? onBack;
 
   @override
   State<CustomerChatScreen> createState() => _CustomerChatScreenState();
@@ -105,7 +107,7 @@ class _CustomerChatScreenState extends State<CustomerChatScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            const ChatHeader(),
+            ChatHeader(onBack: widget.onBack),
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.symmetric(

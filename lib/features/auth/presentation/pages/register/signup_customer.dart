@@ -4,7 +4,7 @@ import '../../../../../core/extensions/validate.dart';
 import '../../../../../core/services/Custom_button_widget.dart';
 import '../../../../../core/services/custom_text_field.dart';
 import '../../../../../core/theme/app_colors.dart';
-import '../../../../home/presentation/screens/customer_home_screen.dart';
+import '../../../../home/presentation/screens/customer_shell.dart';
 import '../login/login_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/auth_bloc.dart';
@@ -76,7 +76,7 @@ class _SignupCustomerScreenState
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => const CustomerHomeScreen(),
+                builder: (context) => const CustomerShell(),
               ),
             );
           } else if (state is AuthFailure) {

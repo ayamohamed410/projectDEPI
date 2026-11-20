@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:final_depi/core/theme/app_colors.dart';
+import '../screens/technicians_list_screen.dart';
 
 class CoreServicesGrid extends StatelessWidget {
   final String query;
@@ -68,7 +70,14 @@ class CoreServicesGrid extends StatelessWidget {
       ),
       itemBuilder: (context, index) {
         final service = results[index];
-        return Container(
+        return InkWell(
+          onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(
+            builder: (_) => TechniciansListScreen(
+              category: service['title'] == 'AC & Cooling' ? 'HVAC' : service['title'] as String,
+            ),
+          )),
+          borderRadius: BorderRadius.circular(16),
+          child: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: Colors.white,
@@ -83,7 +92,7 @@ class CoreServicesGrid extends StatelessWidget {
                   color: const Color(0xFFE8EAF6),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(service['icon'], color: Colors.blue, size: 22),
+                child: Icon(service['icon'], color: ColorsApp.accentBlue, size: 22),
               ),
               const SizedBox(width: 10),
               Expanded(
@@ -110,13 +119,14 @@ class CoreServicesGrid extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
-                        color: Colors.blue,
+                        color: ColorsApp.accentBlue,
                       ),
                     ),
                   ],
                 ),
               ),
             ],
+          ),
           ),
         );
       },

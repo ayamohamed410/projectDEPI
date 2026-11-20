@@ -13,7 +13,9 @@ class TechnicianInfo {
     required this.experience,
   });
 
-  factory TechnicianInfo.fromDoc(QueryDocumentSnapshot<Map<String, dynamic>> doc) {
+  factory TechnicianInfo.fromDoc(
+    QueryDocumentSnapshot<Map<String, dynamic>> doc,
+  ) {
     final data = doc.data();
     return TechnicianInfo(
       id: doc.id,
@@ -36,13 +38,17 @@ class FirestoreTechniciansRepository implements TechniciansRepository {
   Future<List<TechnicianInfo>> fetchForCategory(String category) async {
     // This matches the ACTUAL schema in auth_remote_data_source_impl.dart:
     // users/{uid}: role, name, specialization, experience.
-    final snapshot = await firestore.collection('users')
-        .where('role', isEqualTo: 'technician').get();
+    final snapshot = await firestore
+        .collection('technician_public_profiles')
+        .get();
     final all = snapshot.docs.map(TechnicianInfo.fromDoc);
     final wanted = _normalizedCategory(category);
-    final matches = all.where((tech) =>
-        _normalizedCategory(tech.specialization) == wanted).toList();
-    matches.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+    final matches = all
+        .where((tech) => _normalizedCategory(tech.specialization) == wanted)
+        .toList();
+    matches.sort(
+      (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),
+    );
     return matches;
   }
 }

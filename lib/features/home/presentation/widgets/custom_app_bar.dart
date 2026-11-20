@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:final_depi/core/theme/app_colors.dart';
+import 'package:final_depi/features/customer_settings/screens/customer_settings_screens.dart';
 
 class CustomAppBar extends StatelessWidget {
   const CustomAppBar({super.key});
@@ -36,7 +38,9 @@ class CustomAppBar extends StatelessWidget {
                 Icons.notifications_outlined,
                 color: Colors.black87,
               ),
-              onPressed: () {},
+              onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Notifications are not available yet.')),
+              ),
             ),
             const SizedBox(width: 4),
             Container(
@@ -44,10 +48,16 @@ class CustomAppBar extends StatelessWidget {
                 shape: BoxShape.circle,
                 border: Border.all(color: Colors.grey.shade300),
               ),
-              child: const CircleAvatar(
-                radius: 18,
-                backgroundColor: Colors.black,
-                child: Icon(Icons.person, color: Colors.white, size: 20),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(24),
+                onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(
+                  builder: (_) => const CustomerSettingsScreen(),
+                )),
+                child: const CircleAvatar(
+                  radius: 18,
+                  backgroundColor: ColorsApp.primaryColor,
+                  child: Icon(Icons.person, color: ColorsApp.whiteColor, size: 20),
+                ),
               ),
             ),
           ],

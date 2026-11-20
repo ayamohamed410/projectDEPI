@@ -6,6 +6,7 @@ import '../../logic/customer_home_bloc.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/ai_triage_banner.dart';
 import '../widgets/core_services_grid.dart';
+import 'package:final_depi/core/theme/app_colors.dart';
 
 class CustomerHomeScreen extends StatelessWidget {
   const CustomerHomeScreen({super.key});
@@ -26,6 +27,7 @@ class _CustomerHomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorsApp.background,
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -46,7 +48,7 @@ class _CustomerHomeView extends StatelessWidget {
               // Do not show a fake active order. Add a real orders BLoC later.
               const SizedBox(height: 24),
               const _SectionHeader(
-                title: 'Core Home Services',
+                title: 'Book a Service Manually',
                 actionText: 'View All >',
               ),
               const SizedBox(height: 12),
@@ -60,7 +62,6 @@ class _CustomerHomeView extends StatelessWidget {
           ),
         ),
       ),
-      // bottomNavigationBar: const CustomBottomNavBar(),
     );
   }
 }
@@ -133,7 +134,7 @@ class _WelcomeHeader extends StatelessWidget {
             ),
           ]);
         }
-        final name = (state as CustomerHomeLoaded).customerName;
+        final name = state is CustomerHomeLoaded ? state.customerName : 'there';
         return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text('Hello, $name 👋',
             style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black)),
