@@ -27,7 +27,6 @@ import '../../features/splash/presentation/splash_screen.dart';
 import '../../features/customer_chat/screens/customer_chat_screen.dart';
 import '../../features/customer_service_details/screens/customer_service_details_screen.dart';
 import '../../features/customer_settings/screens/customer_settings_screens.dart';
-
 import '../../features/rating_and_review/screens/rating_and_review_screen.dart';
 
 abstract class RoutesApp {
