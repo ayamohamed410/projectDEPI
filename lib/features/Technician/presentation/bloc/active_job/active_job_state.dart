@@ -12,7 +12,7 @@ class ActiveJobState extends Equatable {
   final int minutesInProgress;
   final String? errorMessage;
 
-  /// One-shot text for a SnackBar (cleared by [MessageShown]).
+
   final String? message;
 
   /// Becomes true after the job was completed successfully (screen navigates).
@@ -74,7 +74,7 @@ class ActiveJobState extends Equatable {
   bool get hasAfterPhoto => (job?.afterPhotoUrl ?? '').isNotEmpty;
   int get photosCount => (hasBeforePhoto ? 1 : 0) + (hasAfterPhoto ? 1 : 0);
 
-  /// Photos / parts / status can be changed only while the job is running.
+
   bool get isEditable => JobStatus.active.contains(jobStatus);
 
   bool get canComplete =>

@@ -137,11 +137,11 @@ abstract class RoutesApp {
           settings: settings,
         );
 
-      case RouteScreenName.technicianDashboard:
-        return MaterialPageRoute(
-          builder: (context) => const TechnicianDashboardScreen(),
-          settings: settings,
-        );
+      // case RouteScreenName.technicianDashboard:
+      //   return MaterialPageRoute(
+      //     builder: (context) => const TechnicianDashboardScreen(),
+      //     settings: settings,
+      //   );
 
       case RouteScreenName.ratingAndReview:
         return MaterialPageRoute(

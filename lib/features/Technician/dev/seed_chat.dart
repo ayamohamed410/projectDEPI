@@ -7,7 +7,7 @@ class SeedChat {
     final firestore = FirebaseFirestore.instance;
     final jobId = 'job_chat_test_123';
 
-    // 1. كتابة الأوردر التجريبي
+
     await firestore.collection('jobs').doc(jobId).set({
       'id': jobId,
       'technicianId': uid,
@@ -22,10 +22,10 @@ class SeedChat {
       'statusHistory': ['accepted', 'on_way', 'arrived', 'in_progress'],
     }, SetOptions(merge: true));
 
-    // 2. كتابة 4 رسائل تجريبية
+  
     final messagesRef = firestore.collection('jobs').doc(jobId).collection('messages');
     
-    // مسح الرسائل القديمة إن وجدت
+  
     final snapshots = await messagesRef.get();
     for (var doc in snapshots.docs) {
       await doc.reference.delete();
