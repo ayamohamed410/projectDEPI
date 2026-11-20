@@ -1,3 +1,4 @@
+import 'package:final_depi/features/technician_home/technician_home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/constants/assets_app.dart';
@@ -6,7 +7,7 @@ import '../../../../../core/services/Custom_button_widget.dart';
 import '../../../../../core/services/custom_text_field.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../home/presentation/screens/customer_home_screen.dart';
-import '../../../../technical_home/screens/technician_dashboard_screen.dart';
+
 import '../../bloc/auth_bloc.dart';
 import '../../bloc/auth_event.dart';
 import '../forgetPassword/forget_password.dart';
@@ -64,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const TechnicianDashboardScreen(),
+                  builder: (context) => const TechnicianHome(),
                 ),
               );
             }
