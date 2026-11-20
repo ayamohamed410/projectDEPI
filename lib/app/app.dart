@@ -1,9 +1,6 @@
 import 'package:final_depi/app/routes/routes_app.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../features/Technician/technician_dependencies.dart';
-import '../features/Technician/presentation/bloc/profile/profile_event.dart';
-import '../features/Technician/presentation/pages/technician_profile.dart';
+
 
 class HelhalyApp extends StatelessWidget {
   const HelhalyApp({super.key});
@@ -20,7 +17,6 @@ class HelhalyApp extends StatelessWidget {
         fontFamily: 'sans-serif',
       ),
        initialRoute: '/',
-      
        onGenerateRoute: RoutesApp.onGeneratedRoute,
 
     );

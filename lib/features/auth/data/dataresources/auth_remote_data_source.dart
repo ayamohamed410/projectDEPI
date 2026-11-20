@@ -21,6 +21,7 @@ abstract class AuthRemoteDataSource {
     required String specialization,
     required String experience,
   });
+  Future<UserModel> signInWithGoogle();
 
   Future<void> logout();
 }

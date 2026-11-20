@@ -1,4 +1,5 @@
 import 'package:final_depi/core/theme/app_colors.dart';
+import 'package:final_depi/features/customer_request_status/screens/request_status_screen.dart';
 import 'package:flutter/material.dart';
 
 class ChatHeader extends StatelessWidget {
@@ -66,18 +67,28 @@ class ChatHeader extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 5),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 5,
-                  ),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFE0EAFF),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: const Text(
-                    'View Status →',
-                    style: TextStyle(fontSize: 11, color: Color(0xFF1262E8)),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RequestStatusScreen(),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 5,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFE0EAFF),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: const Text(
+                      'View Status →',
+                      style: TextStyle(fontSize: 11, color: Color(0xFF1262E8)),
+                    ),
                   ),
                 ),
               ],
