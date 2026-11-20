@@ -4,21 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'job_model.dart';
 import 'parse_utils.dart';
 
-/// The single place that talks to `jobs` in Firestore.
-///
-/// Customer side (booking, chat, rating):
-///   final repo = JobsRepository();
-///   final jobId = await repo.createBooking(technicianId: id, diagnosisTitle: 'Leaking tap');
-///   repo.watchMessages(jobId) / repo.sendMessage(jobId, 'Hello')
-///   await repo.submitRating(jobId, 5, 'Great work');
-///
-/// Technician side (requests, active job, history):
-///   repo.watchTechnicianJobs()          // everything for the signed-in technician
-///   await repo.acceptJob(jobId);
-///   await repo.updateStatus(jobId, JobStatus.onWay);
-///   await repo.completeJob(jobId);
-///
-/// All queries filter by ONE field only, so no composite index is needed.
+
 class JobsRepository {
   JobsRepository({FirebaseFirestore? firestore, FirebaseAuth? auth})
       : _db = firestore ?? FirebaseFirestore.instance,
@@ -33,17 +19,12 @@ class JobsRepository {
   CollectionReference<Map<String, dynamic>> _messages(String jobId) =>
       _jobs.doc(jobId).collection('messages');
 
-  /// The signed-in user's uid. Throws if nobody is signed in.
+
   String get currentUid {
     final uid = _auth.currentUser?.uid;
     if (uid == null) throw StateError('No signed-in user');
     return uid;
   }
-
-  // ---------------------------------------------------------------- reads
-
-  /// Technicians for the customer's list (users where role == technician).
-  /// Each map has the user's fields plus an 'id' key.
   Stream<List<Map<String, dynamic>>> watchTechnicians() => _users
       .where('role', isEqualTo: 'technician')
       .snapshots()
@@ -56,8 +37,7 @@ class JobsRepository {
         },
       );
 
-  /// All jobs of a technician (default: the signed-in one), newest first.
-  /// Filter by status / month on the device.
+
   Stream<List<JobModel>> watchTechnicianJobs([String? technicianId]) => _jobs
       .where('technicianId', isEqualTo: technicianId ?? currentUid)
       .snapshots()
@@ -70,14 +50,13 @@ class JobsRepository {
     return _toJobs(snap);
   }
 
-  /// All jobs of a customer (default: the signed-in one), newest first.
+
   Stream<List<JobModel>> watchCustomerJobs([String? customerId]) => _jobs
       .where('customerId', isEqualTo: customerId ?? currentUid)
       .snapshots()
       .map(_toJobs);
 
-  /// The job the technician is working on right now, or null. Lets the
-  /// Active Job / Chat screens find their job when nobody passes a jobId.
+
   Future<JobModel?> getActiveJobForTechnician([String? technicianId]) async {
     final jobs = await getTechnicianJobs(technicianId);
     for (final j in jobs) {
@@ -96,9 +75,7 @@ class JobsRepository {
     return jobs;
   }
 
-  // ------------------------------------------------------------ customer
-
-  /// Called by the customer's "Book" button. Returns the new job id.
+  
   Future<String> createBooking({
     required String technicianId,
     required String diagnosisTitle,
@@ -138,12 +115,12 @@ class JobsRepository {
     return '#7H-${n.toString().padLeft(4, '0')}';
   }
 
-  /// The customer signs off the finished work ("Completed & Signed").
+
   Future<void> confirmCompletion(String jobId) =>
       _jobs.doc(jobId).update({'customerSigned': true});
 
   /// Customer cancels (or technician declines). [cancellationFee] is the
-  /// amount credited to the technician ("Fee Credited" on Jobs History).
+  
   Future<void> cancelJob(
     String jobId, {
     String cancelledBy = 'customer',
@@ -159,9 +136,7 @@ class JobsRepository {
         ]),
       });
 
-  /// Stores the rating on the job and updates the technician's average.
-  /// The average update is best-effort: if Firestore rules forbid a customer
-  /// writing another user's document it is skipped (the job still gets rated).
+
   Future<void> submitRating(
     String jobId,
     double rating, [
@@ -208,16 +183,16 @@ class JobsRepository {
         );
       });
     } on FirebaseException {
-      // Rules may block this write; the job rating above is already saved.
+    
     }
   }
 
-  // ----------------------------------------------------------- technician
+
 
   Future<void> acceptJob(String jobId) => updateStatus(jobId, JobStatus.accepted);
 
   /// Moves the job to [status] and records it in `statusHistory`.
-  /// Use [completeJob] for the final step so totals and counters update.
+  
   Future<void> updateStatus(String jobId, String status) =>
       _jobs.doc(jobId).update({
         'status': status,
@@ -227,7 +202,8 @@ class JobsRepository {
         if (status == JobStatus.cancelled) 'closedAt': FieldValue.serverTimestamp(),
       });
 
-  /// Adds a part and recomputes partsAmount / totalAmount.
+
+
   Future<void> addPart(String jobId, JobPart part) =>
       _db.runTransaction<void>((tx) async {
         final ref = _jobs.doc(jobId);
@@ -268,7 +244,7 @@ class JobsRepository {
       _jobs.doc(jobId).update({before ? 'beforePhotoUrl' : 'afterPhotoUrl': url});
 
   /// Final step: status = completed, netPayout = totalAmount - [platformFee],
-  /// and the technician's completedJobsCount goes up by one.
+
   Future<void> completeJob(String jobId, {double platformFee = 0}) =>
       _db.runTransaction<void>((tx) async {
         final ref = _jobs.doc(jobId);
@@ -296,14 +272,14 @@ class JobsRepository {
           );
         }
       });
-/// Technician reports a problem / delay on the job (Active Job screen).
+
   Future<void> reportIssue(String jobId, String reason) =>
       _jobs.doc(jobId).update({
         'issueReason': reason,
         'issueReportedAt': FieldValue.serverTimestamp(),
       });
 
-  // ---------------------------------------------------------------- chat
+
 
   Stream<List<ChatMessage>> watchMessages(String jobId) => _messages(jobId)
       .orderBy('createdAt')
@@ -322,7 +298,7 @@ class JobsRepository {
     });
   }
 
-  /// Marks the other person's unread messages as read (the double tick).
+  
   Future<void> markMessagesRead(String jobId) async {
     final uid = currentUid;
     final snap = await _messages(jobId).where('readAt', isNull: true).get();
@@ -337,7 +313,7 @@ class JobsRepository {
     if (changed > 0) await batch.commit();
   }
 
-  /// Unread messages sent by the other person (badge on the Chat button).
+  
   Stream<int> watchUnreadCount(String jobId) {
     final uid = currentUid;
     return watchMessages(jobId).map(

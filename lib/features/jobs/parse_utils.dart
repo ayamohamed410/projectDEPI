@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-/// Tolerant parsers: a missing or wrongly-typed field never crashes a screen,
-/// it just falls back to a safe default.
+
 
 double? asDouble(dynamic v) {
   if (v is num) return v.toDouble();

@@ -11,9 +11,12 @@ class SeedJobs {
 
     final batch = db.batch();
 
+
+    DocumentReference<Map<String, dynamic>> demoRef(String key) =>
+        db.collection('jobs').doc('demo_${uid}_$key');
+
     // 1. Completed + Signed with review
-    final ref1 = db.collection('jobs').doc();
-    batch.set(ref1, {
+    batch.set(demoRef('1'), {
       'technicianId': uid,
       'customerId': uid,
       'customerName': 'Tarek Mansour',
@@ -25,13 +28,13 @@ class SeedJobs {
       'rating': 5.0,
       'reviewText': 'Exceptional Service!',
       'netPayout': 370.0,
+      'isDemo': true,
       'createdAt': Timestamp.fromDate(now.subtract(const Duration(hours: 2))),
       'closedAt': Timestamp.fromDate(now),
     });
 
     // 2. Completed unsigned with rating only
-    final ref2 = db.collection('jobs').doc();
-    batch.set(ref2, {
+    batch.set(demoRef('2'), {
       'technicianId': uid,
       'customerId': uid,
       'customerName': 'Karim H.',
@@ -43,13 +46,13 @@ class SeedJobs {
       'rating': 4.8,
       'reviewText': '',
       'netPayout': 520.0,
+      'isDemo': true,
       'createdAt': Timestamp.fromDate(now.subtract(const Duration(days: 1))),
       'closedAt': Timestamp.fromDate(now.subtract(const Duration(days: 1))),
     });
 
     // 3. Cancelled with cancellationFee 75
-    final ref3 = db.collection('jobs').doc();
-    batch.set(ref3, {
+    batch.set(demoRef('3'), {
       'technicianId': uid,
       'customerId': uid,
       'customerName': 'Outdoor Client',
@@ -60,13 +63,13 @@ class SeedJobs {
       'cancelledBy': 'customer',
       'cancellationFee': 75.0,
       'netPayout': 0.0,
+      'isDemo': true,
       'createdAt': Timestamp.fromDate(now.subtract(const Duration(days: 3))),
       'closedAt': Timestamp.fromDate(now.subtract(const Duration(days: 3))),
     });
 
     // 4. Disputed
-    final ref4 = db.collection('jobs').doc();
-    batch.set(ref4, {
+    batch.set(demoRef('4'), {
       'technicianId': uid,
       'customerId': uid,
       'customerName': 'Nourhan El-Sayed',
@@ -78,13 +81,13 @@ class SeedJobs {
       'rating': 4.9,
       'reviewText': 'Verified',
       'netPayout': 680.0,
+      'isDemo': true,
       'createdAt': Timestamp.fromDate(now.subtract(const Duration(days: 5))),
       'closedAt': Timestamp.fromDate(now.subtract(const Duration(days: 5))),
     });
 
     // 5 & 6. Two completed jobs in the previous month
-    final ref5 = db.collection('jobs').doc();
-    batch.set(ref5, {
+    batch.set(demoRef('5'), {
       'technicianId': uid,
       'customerId': uid,
       'customerName': 'Mona Zaki',
@@ -95,12 +98,12 @@ class SeedJobs {
       'customerSigned': true,
       'rating': 5.0,
       'netPayout': 1200.0,
+      'isDemo': true,
       'createdAt': Timestamp.fromDate(prevMonth),
       'closedAt': Timestamp.fromDate(prevMonth),
     });
 
-    final ref6 = db.collection('jobs').doc();
-    batch.set(ref6, {
+    batch.set(demoRef('6'), {
       'technicianId': uid,
       'customerId': uid,
       'customerName': 'Ahmed Helmy',
@@ -111,6 +114,7 @@ class SeedJobs {
       'customerSigned': true,
       'rating': 4.7,
       'netPayout': 950.0,
+      'isDemo': true,
       'createdAt': Timestamp.fromDate(prevMonth),
       'closedAt': Timestamp.fromDate(prevMonth),
     });

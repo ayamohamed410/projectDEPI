@@ -20,8 +20,7 @@ class TechnicianProfileModel extends TechnicianProfileEntity {
     required super.hourlyRate,
   });
 
-  /// Reads the `users/{uid}` document. Fields that the signup flow does not
-  /// create yet (rating, completedJobs, ...) fall back to safe defaults.
+
   factory TechnicianProfileModel.fromJson(Map<String, dynamic> json) {
     final String? specialization = json['specialization'] as String?;
 
@@ -31,7 +30,7 @@ class TechnicianProfileModel extends TechnicianProfileEntity {
       title: json['title'] ?? '${specialization ?? 'Technician'} Technician',
 
 
-    //  rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
+
       rating: (json['ratingAvg'] as num?)?.toDouble() ??
           (json['rating'] as num?)?.toDouble() ??
           0.0,
@@ -40,7 +39,7 @@ class TechnicianProfileModel extends TechnicianProfileEntity {
       experience: (json['experience'] as String?) ?? '-',
 
 
-    //  completedJobs: (json['completedJobs'] as num?)?.toInt() ?? 0,
+
       completedJobs: (json['completedJobsCount'] as num?)?.toInt() ??
           (json['completedJobs'] as num?)?.toInt() ??
           0,

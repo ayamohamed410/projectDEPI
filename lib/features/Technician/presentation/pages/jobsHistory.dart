@@ -217,6 +217,7 @@ class _JobsHistoryViewState extends State<JobsHistoryView> {
             },
             child: Row(
               children: [
+                if (kDebugMode)
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
@@ -510,7 +511,7 @@ class _JobsHistoryViewState extends State<JobsHistoryView> {
                                     );
                                   },
                                   onTap: () {
-                                    // ربط الضغط على الكارت بالكامل بعرض التفاصيل
+                                    
                                     _showWorkOrderDetails(context, job);
                                   },
                                 );
@@ -588,22 +589,7 @@ class _JobsHistoryViewState extends State<JobsHistoryView> {
         ],
       ),
 
-      /*
-  floatingActionButton: FloatingActionButton.extended(
-  icon: const Icon(Icons.chat),
-  label: const Text('Test Chat'),
-  onPressed: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        
-        builder: (_) => const TechnicianChat(
-          jobId: '2OVOcckyCD7tlc6BE29D',
-        ),
-      ),
-    );
-  },
-), */
+    
  );
   }
 }
