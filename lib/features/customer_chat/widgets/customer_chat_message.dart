@@ -4,8 +4,8 @@ import 'package:final_depi/core/theme/app_colors.dart';
 import 'package:final_depi/features/customer_chat/model/chat_message_model.dart';
 import 'package:flutter/material.dart';
 
-class ChatMessage extends StatelessWidget {
-  const ChatMessage({super.key, required this.message});
+class CustomerChatMessage extends StatelessWidget {
+  const CustomerChatMessage({super.key, required this.message});
 
   final ChatMessageModel message;
 

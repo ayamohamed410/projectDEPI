@@ -4,11 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'job_model.dart';
 import 'parse_utils.dart';
 
-
 class JobsRepository {
   JobsRepository({FirebaseFirestore? firestore, FirebaseAuth? auth})
-      : _db = firestore ?? FirebaseFirestore.instance,
-        _auth = auth ?? FirebaseAuth.instance;
+    : _db = firestore ?? FirebaseFirestore.instance,
+      _auth = auth ?? FirebaseAuth.instance;
 
   final FirebaseFirestore _db;
   final FirebaseAuth _auth;
@@ -19,24 +18,22 @@ class JobsRepository {
   CollectionReference<Map<String, dynamic>> _messages(String jobId) =>
       _jobs.doc(jobId).collection('messages');
 
-
   String get currentUid {
     final uid = _auth.currentUser?.uid;
     if (uid == null) throw StateError('No signed-in user');
     return uid;
   }
+
   Stream<List<Map<String, dynamic>>> watchTechnicians() => _users
       .where('role', isEqualTo: 'technician')
       .snapshots()
       .map((s) => s.docs.map((d) => {...d.data(), 'id': d.id}).toList());
 
-  Stream<JobModel?> watchJob(String jobId) => _jobs.doc(jobId).snapshots().map(
-        (s) {
-          final data = s.data();
-          return data == null ? null : JobModel.fromMap(s.id, data);
-        },
-      );
-
+  Stream<JobModel?> watchJob(String jobId) =>
+      _jobs.doc(jobId).snapshots().map((s) {
+        final data = s.data();
+        return data == null ? null : JobModel.fromMap(s.id, data);
+      });
 
   Stream<List<JobModel>> watchTechnicianJobs([String? technicianId]) => _jobs
       .where('technicianId', isEqualTo: technicianId ?? currentUid)
@@ -50,12 +47,10 @@ class JobsRepository {
     return _toJobs(snap);
   }
 
-
   Stream<List<JobModel>> watchCustomerJobs([String? customerId]) => _jobs
       .where('customerId', isEqualTo: customerId ?? currentUid)
       .snapshots()
       .map(_toJobs);
-
 
   Future<JobModel?> getActiveJobForTechnician([String? technicianId]) async {
     final jobs = await getTechnicianJobs(technicianId);
@@ -66,7 +61,9 @@ class JobsRepository {
   }
 
   List<JobModel> _toJobs(QuerySnapshot<Map<String, dynamic>> snap) {
-    final jobs = snap.docs.map((d) => JobModel.fromMap(d.id, d.data())).toList();
+    final jobs = snap.docs
+        .map((d) => JobModel.fromMap(d.id, d.data()))
+        .toList();
     jobs.sort((a, b) {
       final da = a.createdAt ?? DateTime.now();
       final db = b.createdAt ?? DateTime.now();
@@ -75,7 +72,6 @@ class JobsRepository {
     return jobs;
   }
 
-  
   Future<String> createBooking({
     required String technicianId,
     required String diagnosisTitle,
@@ -115,27 +111,24 @@ class JobsRepository {
     return '#7H-${n.toString().padLeft(4, '0')}';
   }
 
-
   Future<void> confirmCompletion(String jobId) =>
       _jobs.doc(jobId).update({'customerSigned': true});
 
   /// Customer cancels (or technician declines). [cancellationFee] is the
-  
+
   Future<void> cancelJob(
     String jobId, {
     String cancelledBy = 'customer',
     double cancellationFee = 0,
-  }) =>
-      _jobs.doc(jobId).update({
-        'status': JobStatus.cancelled,
-        'cancelledBy': cancelledBy,
-        'cancellationFee': cancellationFee,
-        'closedAt': FieldValue.serverTimestamp(),
-        'statusHistory': FieldValue.arrayUnion([
-          {'status': JobStatus.cancelled, 'at': Timestamp.now()},
-        ]),
-      });
-
+  }) => _jobs.doc(jobId).update({
+    'status': JobStatus.cancelled,
+    'cancelledBy': cancelledBy,
+    'cancellationFee': cancellationFee,
+    'closedAt': FieldValue.serverTimestamp(),
+    'statusHistory': FieldValue.arrayUnion([
+      {'status': JobStatus.cancelled, 'at': Timestamp.now()},
+    ]),
+  });
 
   Future<void> submitRating(
     String jobId,
@@ -173,36 +166,28 @@ class JobsRepository {
           newCount = count;
           newAvg = (avg * count - oldRating + rating) / count;
         }
-        tx.set(
-          techRef,
-          {
-            'ratingAvg': double.parse(newAvg.toStringAsFixed(2)),
-            'reviewsCount': newCount,
-          },
-          SetOptions(merge: true),
-        );
+        tx.set(techRef, {
+          'ratingAvg': double.parse(newAvg.toStringAsFixed(2)),
+          'reviewsCount': newCount,
+        }, SetOptions(merge: true));
       });
-    } on FirebaseException {
-    
-    }
+    } on FirebaseException {}
   }
 
-
-
-  Future<void> acceptJob(String jobId) => updateStatus(jobId, JobStatus.accepted);
+  Future<void> acceptJob(String jobId) =>
+      updateStatus(jobId, JobStatus.accepted);
 
   /// Moves the job to [status] and records it in `statusHistory`.
-  
+
   Future<void> updateStatus(String jobId, String status) =>
       _jobs.doc(jobId).update({
         'status': status,
         'statusHistory': FieldValue.arrayUnion([
           {'status': status, 'at': Timestamp.now()},
         ]),
-        if (status == JobStatus.cancelled) 'closedAt': FieldValue.serverTimestamp(),
+        if (status == JobStatus.cancelled)
+          'closedAt': FieldValue.serverTimestamp(),
       });
-
-
 
   Future<void> addPart(String jobId, JobPart part) =>
       _db.runTransaction<void>((tx) async {
@@ -210,13 +195,16 @@ class JobsRepository {
         final data = (await tx.get(ref)).data();
         if (data == null) throw StateError('Job not found');
 
-        final parts = ((data['parts'] as List?) ?? const [])
-            .whereType<Map>()
-            .map((e) => Map<String, dynamic>.from(e))
-            .toList()
-          ..add(part.toMap());
-        final partsAmount =
-            parts.fold<double>(0, (s, p) => s + (asDouble(p['price']) ?? 0));
+        final parts =
+            ((data['parts'] as List?) ?? const [])
+                .whereType<Map>()
+                .map((e) => Map<String, dynamic>.from(e))
+                .toList()
+              ..add(part.toMap());
+        final partsAmount = parts.fold<double>(
+          0,
+          (s, p) => s + (asDouble(p['price']) ?? 0),
+        );
         final base = asDouble(data['baseAmount']) ?? 0;
 
         tx.update(ref, {
@@ -240,8 +228,13 @@ class JobsRepository {
       });
 
   /// [before] true = "Before Fix" photo, false = "After Fix" photo.
-  Future<void> setPhotoUrl(String jobId, {required bool before, required String url}) =>
-      _jobs.doc(jobId).update({before ? 'beforePhotoUrl' : 'afterPhotoUrl': url});
+  Future<void> setPhotoUrl(
+    String jobId, {
+    required bool before,
+    required String url,
+  }) => _jobs.doc(jobId).update({
+    before ? 'beforePhotoUrl' : 'afterPhotoUrl': url,
+  });
 
   /// Final step: status = completed, netPayout = totalAmount - [platformFee],
 
@@ -251,7 +244,8 @@ class JobsRepository {
         final data = (await tx.get(ref)).data();
         if (data == null) throw StateError('Job not found');
 
-        final total = asDouble(data['totalAmount']) ??
+        final total =
+            asDouble(data['totalAmount']) ??
             ((asDouble(data['baseAmount']) ?? 0) +
                 (asDouble(data['partsAmount']) ?? 0));
         final techId = asString(data['technicianId']);
@@ -265,11 +259,9 @@ class JobsRepository {
           ]),
         });
         if (techId.isNotEmpty) {
-          tx.set(
-            _users.doc(techId),
-            {'completedJobsCount': FieldValue.increment(1)},
-            SetOptions(merge: true),
-          );
+          tx.set(_users.doc(techId), {
+            'completedJobsCount': FieldValue.increment(1),
+          }, SetOptions(merge: true));
         }
       });
 
@@ -279,14 +271,18 @@ class JobsRepository {
         'issueReportedAt': FieldValue.serverTimestamp(),
       });
 
-
-
   Stream<List<ChatMessage>> watchMessages(String jobId) => _messages(jobId)
       .orderBy('createdAt')
       .snapshots()
-      .map((s) => s.docs.map((d) => ChatMessage.fromMap(d.id, d.data())).toList());
+      .map(
+        (s) => s.docs.map((d) => ChatMessage.fromMap(d.id, d.data())).toList(),
+      );
 
-  Future<void> sendMessage(String jobId, String text, {String? imageUrl}) async {
+  Future<void> sendMessage(
+    String jobId,
+    String text, {
+    String? imageUrl,
+  }) async {
     final t = text.trim();
     if (t.isEmpty && (imageUrl == null || imageUrl.isEmpty)) return;
     await _messages(jobId).add({
@@ -298,7 +294,6 @@ class JobsRepository {
     });
   }
 
-  
   Future<void> markMessagesRead(String jobId) async {
     final uid = currentUid;
     final snap = await _messages(jobId).where('readAt', isNull: true).get();
@@ -313,11 +308,65 @@ class JobsRepository {
     if (changed > 0) await batch.commit();
   }
 
-  
   Stream<int> watchUnreadCount(String jobId) {
     final uid = currentUid;
     return watchMessages(jobId).map(
       (list) => list.where((m) => m.senderId != uid && m.readAt == null).length,
     );
+  }
+
+  Future<void> deleteCustomerRequest(String jobId) async {
+    final jobRef = _jobs.doc(jobId);
+
+    // Check if the request exists.
+    final jobSnapshot = await jobRef.get();
+
+    if (!jobSnapshot.exists) {
+      throw StateError('Request not found.');
+    }
+
+    // Check request ownership.
+    final jobData = jobSnapshot.data();
+
+    if (jobData == null || jobData['customerId'] != currentUid) {
+      throw StateError('You are not allowed to delete this request.');
+    }
+
+    // Check if cancellation is still allowed.
+    final status = jobData['status'];
+
+    const cancellableStatuses = [
+      JobStatus.pending,
+      JobStatus.accepted,
+      JobStatus.onWay,
+    ];
+
+    if (!cancellableStatuses.contains(status)) {
+      throw StateError(
+        'The technician has arrived. You can no longer cancel this request.',
+      );
+    }
+
+    // Delete chat messages first.
+    final messagesSnapshot = await _messages(jobId).get();
+
+    const batchSize = 450;
+
+    for (var i = 0; i < messagesSnapshot.docs.length; i += batchSize) {
+      final batch = _db.batch();
+
+      final end = (i + batchSize < messagesSnapshot.docs.length)
+          ? i + batchSize
+          : messagesSnapshot.docs.length;
+
+      for (final message in messagesSnapshot.docs.sublist(i, end)) {
+        batch.delete(message.reference);
+      }
+
+      await batch.commit();
+    }
+
+    // Delete the request.
+    await jobRef.delete();
   }
 }

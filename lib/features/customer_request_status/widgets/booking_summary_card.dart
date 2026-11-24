@@ -1,12 +1,27 @@
 import 'package:final_depi/core/theme/app_colors.dart';
 import 'package:final_depi/features/customer_service_details/screens/customer_service_details_screen.dart';
+import 'package:final_depi/features/jobs/job_model.dart';
 import 'package:flutter/material.dart';
 
 class BookingSummaryCard extends StatelessWidget {
-  const BookingSummaryCard({super.key});
+  final JobModel job;
+
+  const BookingSummaryCard({super.key, required this.job});
 
   @override
   Widget build(BuildContext context) {
+    final issueTitle = job.diagnosisTitle.isNotEmpty
+        ? job.diagnosisTitle
+        : 'No issue title provided';
+
+    final issueDescription = job.problemDescription.isNotEmpty
+        ? job.problemDescription
+        : 'No additional description';
+
+    final serviceAddress = job.customerArea.isNotEmpty
+        ? job.customerArea
+        : 'Address not provided';
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(12),
@@ -27,7 +42,6 @@ class BookingSummaryCard extends StatelessWidget {
                   color: ColorsApp.primaryColor,
                 ),
               ),
-
               TextButton(
                 onPressed: () {
                   Navigator.push(
@@ -49,23 +63,19 @@ class BookingSummaryCard extends StatelessWidget {
               ),
             ],
           ),
-
           const SizedBox(height: 8),
-          // issue reported
           _buildSummaryItem(
             icon: Icons.build,
             title: 'Issue Reported',
-            content: 'Kitchen Sink Pipe Pressure Leak',
-            subtitle: 'Immediate Priority Dispatch • Today',
+            content: issueTitle,
+            subtitle: issueDescription,
           ),
-
           const SizedBox(height: 7),
-          // location for customer
           _buildSummaryItem(
             icon: Icons.location_on_outlined,
             title: 'Service Address',
-            content: 'Apt 402, Building 12',
-            subtitle: 'South Teseen St, New Cairo',
+            content: serviceAddress,
+            subtitle: 'Customer service location',
           ),
         ],
       ),
@@ -77,7 +87,6 @@ class BookingSummaryCard extends StatelessWidget {
     required String title,
     required String content,
     required String subtitle,
-    bool horizontal = false,
   }) {
     return Container(
       width: double.infinity,
@@ -97,9 +106,7 @@ class BookingSummaryCard extends StatelessWidget {
             ),
             child: Icon(icon, size: 16, color: const Color(0xFF0054D8)),
           ),
-
           const SizedBox(width: 9),
-
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,48 +118,23 @@ class BookingSummaryCard extends StatelessWidget {
                     color: ColorsApp.primaryColor,
                   ),
                 ),
-
-                if (horizontal)
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          subtitle,
-                          style: const TextStyle(
-                            fontSize: 9,
-                            color: ColorsApp.greyColor,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        content,
-                        style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
-                          color: ColorsApp.primaryColor,
-                        ),
-                      ),
-                    ],
-                  )
-                else ...[
-                  const SizedBox(height: 2),
-                  Text(
-                    content,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: ColorsApp.primaryColor,
-                    ),
+                const SizedBox(height: 2),
+                Text(
+                  content,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: ColorsApp.primaryColor,
                   ),
-                  const SizedBox(height: 2),
-                  Text(
-                    subtitle,
-                    style: const TextStyle(
-                      fontSize: 9,
-                      color: ColorsApp.greyColor,
-                    ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    fontSize: 9,
+                    color: ColorsApp.greyColor,
                   ),
-                ],
+                ),
               ],
             ),
           ),
