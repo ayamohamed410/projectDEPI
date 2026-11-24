@@ -1,9 +1,14 @@
 import 'package:final_depi/core/theme/app_colors.dart';
 import 'package:final_depi/features/customer_chat/screens/customer_chat_screen.dart';
+import 'package:final_depi/features/customer_request_status/data/technician_status_repository.dart';
+import 'package:final_depi/features/jobs/job_model.dart';
 import 'package:flutter/material.dart';
 
 class TechnicianCardStatus extends StatelessWidget {
-  const TechnicianCardStatus({super.key});
+  TechnicianCardStatus({super.key, required this.job});
+
+  final JobModel job;
+  final TechnicianStatusRepository _repository = TechnicianStatusRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -14,151 +19,90 @@ class TechnicianCardStatus extends StatelessWidget {
         color: ColorsApp.whiteColor,
         borderRadius: BorderRadius.circular(14),
       ),
-      child: Column(
-        children: [
-          Row(
+      child: FutureBuilder<TechnicianStatusInfo?>(
+        future: _repository.fetchTechnicianById(job.technicianId),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return const Text('Could not load technician information');
+          }
+
+          final technician = snapshot.data;
+
+          if (technician == null) {
+            return const Text('Technician information not available');
+          }
+
+          return Column(
             children: [
-              Stack(
-                clipBehavior: Clip.none,
+              Row(
                 children: [
                   const CircleAvatar(
                     radius: 25,
                     backgroundColor: ColorsApp.blueColor,
-
-                    child:
-                        // هغيرها ل photoimage
-                        Icon(
-                          Icons.person,
-                          size: 30,
-                          color: ColorsApp.primaryColor,
-                        ),
-                  ),
-
-                  Positioned(
-                    right: -4,
-                    bottom: -4,
-                    child: CircleAvatar(
-                      radius: 9,
-                      backgroundColor: const Color(0xFF0054D8),
-                      child: const Icon(
-                        Icons.verified,
-                        color: ColorsApp.whiteColor,
-                        size: 12,
-                      ),
+                    child: Icon(
+                      Icons.person,
+                      size: 30,
+                      color: ColorsApp.primaryColor,
                     ),
                   ),
-                ],
-              ),
-
-              const SizedBox(width: 12),
-
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Mahmoud El-Sayed',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: ColorsApp.primaryColor,
-                      ),
-                    ),
-
-                    const Text(
-                      'Master Plumber • 12 yrs exp',
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: ColorsApp.greyColor,
-                      ),
-                    ),
-
-                    const SizedBox(height: 3),
-
-                    Row(
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(
-                          Icons.verified,
-                          color: Color(0xFF0054D8),
-                          size: 12,
-                        ),
-                        const SizedBox(width: 3),
-                        const Text(
-                          'Elite Verified',
-                          style: TextStyle(
-                            fontSize: 9,
-                            color: Color(0xFF0054D8),
+                        Text(
+                          technician.name,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: ColorsApp.primaryColor,
                           ),
                         ),
-                        const SizedBox(width: 8),
-                        const Icon(
-                          Icons.star,
-                          color: Color(0xFFFFA500),
-                          size: 13,
-                        ),
-                        const SizedBox(width: 3),
-                        const Text(
-                          '4.9 (184)',
-                          style: TextStyle(
+                        const SizedBox(height: 4),
+                        Text(
+                          '${technician.specialization} • ${technician.experience} experience',
+                          style: const TextStyle(
                             fontSize: 10,
-                            color: ColorsApp.primaryColor,
+                            color: ColorsApp.greyColor,
                           ),
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
-
-          const SizedBox(height: 14),
-
-          Row(
-            children: [
-              Expanded(
-                child: _buildActionButton(
-                  title: 'Chat',
-                  icon: Icons.chat_bubble_outline,
-                  backgroundColor: const Color(0xFF0054D8),
-                  foregroundColor: ColorsApp.whiteColor,
-                  onTap: () {
+              const SizedBox(height: 14),
+              SizedBox(
+                width: double.infinity,
+                height: 36,
+                child: ElevatedButton.icon(
+                  onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => CustomerChatScreen(),
+                        builder: (context) => CustomerChatScreen(jobId: job.id),
                       ),
                     );
                   },
+                  icon: const Icon(Icons.chat_bubble_outline, size: 14),
+                  label: const Text('Chat', style: TextStyle(fontSize: 11)),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF0054D8),
+                    foregroundColor: ColorsApp.whiteColor,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(7),
+                    ),
+                  ),
                 ),
               ),
             ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildActionButton({
-    required String title,
-    required IconData icon,
-    required Color backgroundColor,
-    required Color foregroundColor,
-    required VoidCallback onTap,
-  }) {
-    return SizedBox(
-      height: 36,
-      child: ElevatedButton.icon(
-        onPressed: onTap,
-        icon: Icon(icon, size: 14),
-        label: Text(title, style: const TextStyle(fontSize: 11)),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor,
-          foregroundColor: foregroundColor,
-          elevation: 0,
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
-        ),
+          );
+        },
       ),
     );
   }

@@ -1,11 +1,17 @@
 import 'package:final_depi/core/theme/app_colors.dart';
 import 'package:final_depi/features/customer_request_status/screens/request_status_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:final_depi/features/customer_request_status/bloc/request_status_bloc.dart';
+import 'package:final_depi/features/customer_request_status/bloc/request_status_event.dart';
+import 'package:final_depi/features/jobs/jobs_repository.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:final_depi/features/jobs/job_model.dart';
 
 class ChatHeader extends StatelessWidget {
-  const ChatHeader({super.key, this.onBack});
+  const ChatHeader({super.key, this.onBack, this.jobId});
 
   final VoidCallback? onBack;
+  final String? jobId;
 
   @override
   Widget build(BuildContext context) {
@@ -49,115 +55,199 @@ class ChatHeader extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 18),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-            decoration: BoxDecoration(
-              color: ColorsApp.blueColor,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.support_agent,
-                  size: 17,
-                  color: Color(0xFF1262E8),
-                ),
-                const SizedBox(width: 5),
-                const Expanded(
-                  child: Text(
-                    'Request #7H-9482 • Kitchen Leak',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 12),
-                  ),
-                ),
-                const SizedBox(width: 5),
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => RequestStatusScreen(),
-                      ),
+
+          StreamBuilder<JobModel?>(
+            stream: jobId == null || jobId!.isEmpty
+                ? null
+                : JobsRepository().watchJob(jobId!),
+            builder: (context, snapshot) {
+              final job = snapshot.data;
+
+              final hasJobId = jobId != null && jobId!.isNotEmpty;
+              final isLoading =
+                  hasJobId &&
+                  snapshot.connectionState == ConnectionState.waiting;
+
+              final requestText = !hasJobId
+                  ? 'No active request'
+                  : snapshot.hasError
+                  ? 'Unable to load request'
+                  : isLoading
+                  ? 'Loading request...'
+                  : job == null
+                  ? 'Request not found'
+                  : 'Request #${job.requestNumber} • ${job.diagnosisTitle}';
+
+              final Widget technicianContent;
+
+              if (!hasJobId) {
+                technicianContent = const Text(
+                  'No technician assigned',
+                  style: TextStyle(fontSize: 13),
+                );
+              } else if (snapshot.hasError) {
+                technicianContent = const Text(
+                  'Unable to load technician',
+                  style: TextStyle(fontSize: 13),
+                );
+              } else if (isLoading) {
+                technicianContent = const Text(
+                  'Loading technician...',
+                  style: TextStyle(fontSize: 13),
+                );
+              } else if (job == null) {
+                technicianContent = const Text(
+                  'Technician not found',
+                  style: TextStyle(fontSize: 13),
+                );
+              } else {
+                final technicianId = job.technicianId;
+
+                technicianContent = StreamBuilder<List<Map<String, dynamic>>>(
+                  stream: JobsRepository().watchTechnicians(),
+                  builder: (context, techniciansSnapshot) {
+                    if (techniciansSnapshot.hasError) {
+                      return const Text(
+                        'Unable to load technician',
+                        style: TextStyle(fontSize: 13),
+                      );
+                    }
+
+                    if (techniciansSnapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return const Text(
+                        'Loading technician...',
+                        style: TextStyle(fontSize: 13),
+                      );
+                    }
+
+                    final technicians = techniciansSnapshot.data ?? [];
+
+                    Map<String, dynamic>? technician;
+
+                    for (final item in technicians) {
+                      if (item['id'] == technicianId) {
+                        technician = item;
+                        break;
+                      }
+                    }
+
+                    final technicianName =
+                        technician?['name']?.toString() ?? 'Technician';
+
+                    return Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            technicianName,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 5),
+                        const Icon(
+                          Icons.verified,
+                          size: 15,
+                          color: Color(0xFF1262E8),
+                        ),
+                      ],
                     );
                   },
-                  child: Container(
+                );
+              }
+
+              return Column(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 18),
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 5,
+                      horizontal: 12,
+                      vertical: 7,
                     ),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFE0EAFF),
-                      borderRadius: BorderRadius.circular(15),
+                      color: ColorsApp.blueColor,
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                    child: const Text(
-                      'View Status →',
-                      style: TextStyle(fontSize: 11, color: Color(0xFF1262E8)),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(18),
-            child: Row(
-              children: [
-                const CircleAvatar(
-                  radius: 21,
-                  backgroundColor: ColorsApp.blueColor,
-                  child: Icon(Icons.person, color: ColorsApp.primaryColor),
-                ),
-                const SizedBox(width: 10),
-                const Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Flexible(
-                            child: Text(
-                              'Mahmoud El-Sayed',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.support_agent,
+                          size: 17,
+                          color: Color(0xFF1262E8),
+                        ),
+                        const SizedBox(width: 5),
+                        Expanded(
+                          child: Text(
+                            requestText,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        ),
+                        const SizedBox(width: 5),
+                        InkWell(
+                          onTap: () {
+                            if (!hasJobId) return;
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => BlocProvider(
+                                  create: (_) =>
+                                      RequestStatusBloc(JobsRepository())
+                                        ..add(LoadRequestById(jobId!)),
+                                  child: RequestStatusScreen(
+                                    onBack: () => Navigator.of(context).pop(),
+                                  ),
+                                ),
                               ),
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 5,
                             ),
-                          ),
-                          SizedBox(width: 5),
-                          Icon(
-                            Icons.verified,
-                            size: 15,
-                            color: Color(0xFF1262E8),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 4),
-                      Row(
-                        children: [
-                          Icon(Icons.circle, size: 7, color: Color(0xFF12B886)),
-                          SizedBox(width: 5),
-                          Expanded(
-                            child: Text(
-                              'Online & En Route (ETA 10:55 AM)',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFE0EAFF),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: const Text(
+                              'View Status →',
                               style: TextStyle(
-                                color: ColorsApp.greyColor,
                                 fontSize: 11,
+                                color: Color(0xFF1262E8),
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
+                  Padding(
+                    padding: const EdgeInsets.all(18),
+                    child: Row(
+                      children: [
+                        const CircleAvatar(
+                          radius: 21,
+                          backgroundColor: ColorsApp.blueColor,
+                          child: Icon(
+                            Icons.person,
+                            color: ColorsApp.primaryColor,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(child: technicianContent),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         ],
       ),

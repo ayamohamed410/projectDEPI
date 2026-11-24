@@ -1,8 +1,12 @@
+import 'package:final_depi/features/customer_request_status/bloc/request_status_bloc.dart';
+import 'package:final_depi/features/customer_request_status/bloc/request_status_event.dart';
+import 'package:final_depi/features/jobs/jobs_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:final_depi/core/theme/app_colors.dart';
 import 'package:final_depi/features/customer_chat/screens/customer_chat_screen.dart';
 import 'package:final_depi/features/customer_request_status/screens/request_status_screen.dart';
 import 'package:final_depi/features/customer_settings/screens/customer_settings_screens.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'customer_home_screen.dart';
 import '../widgets/custom_bottom_nav.dart';
 
@@ -36,7 +40,14 @@ class _CustomerShellState extends State<CustomerShell> {
           index: _index,
           children: [
             const CustomerHomeScreen(),
-            RequestStatusScreen(onBack: () => _select(0)),
+            // ********* Mohamed **********
+            BlocProvider<RequestStatusBloc>(
+              create: (_) =>
+                  RequestStatusBloc(JobsRepository())
+                    ..add(const LoadLatestRequest()),
+              child: RequestStatusScreen(onBack: () => _select(0)),
+            ),
+            //*************************
             CustomerChatScreen(onBack: () => _select(0)),
             CustomerSettingsScreen(onBack: () => _select(0)),
           ],

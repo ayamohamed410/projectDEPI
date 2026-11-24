@@ -1,39 +1,54 @@
 import 'package:final_depi/core/theme/app_colors.dart';
+import 'package:final_depi/features/jobs/job_model.dart';
 import 'package:flutter/material.dart';
 
 class ServiceProgressCard extends StatelessWidget {
-  const ServiceProgressCard({super.key});
+  final JobModel job;
+
+  const ServiceProgressCard({super.key, required this.job});
 
   static const List<Map<String, String>> steps = [
     {
+      'status': JobStatus.accepted,
       'title': 'Accepted',
       'description': 'Request accepted by technician',
-      'time': '10:30 AM',
     },
     {
+      'status': JobStatus.onWay,
       'title': 'On the Way',
-      'description': 'Technician marked on the way',
-      'time': '10:45 AM',
+      'description': 'Technician is on the way',
     },
     {
+      'status': JobStatus.arrived,
       'title': 'Arrived',
-      'description': 'Technician marked arrival at property',
-      'time': '—',
+      'description': 'Technician arrived at your location',
     },
     {
+      'status': JobStatus.inProgress,
       'title': 'In Progress',
       'description': 'Technician started the repair work',
-      'time': '—',
     },
     {
+      'status': JobStatus.completed,
       'title': 'Completed',
       'description': 'Work finished and verified',
-      'time': '—',
     },
   ];
 
+  String _formatTime(DateTime? date) {
+    if (date == null) return '—';
+
+    final hour = date.hour % 12 == 0 ? 12 : date.hour % 12;
+    final minute = date.minute.toString().padLeft(2, '0');
+    final period = date.hour >= 12 ? 'PM' : 'AM';
+
+    return '$hour:$minute $period';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final currentIndex = JobStatus.flow.indexOf(job.status);
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(12),
@@ -45,8 +60,8 @@ class ServiceProgressCard extends StatelessWidget {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text(
+            children: [
+              const Text(
                 'Service Progress',
                 style: TextStyle(
                   fontSize: 15,
@@ -55,8 +70,10 @@ class ServiceProgressCard extends StatelessWidget {
                 ),
               ),
               Text(
-                'Step 2 of 5',
-                style: TextStyle(
+                currentIndex == -1
+                    ? 'Not started'
+                    : 'Step ${currentIndex + 1} of ${steps.length}',
+                style: const TextStyle(
                   fontSize: 9,
                   color: Color(0xFF0054D8),
                   fontWeight: FontWeight.w600,
@@ -64,29 +81,42 @@ class ServiceProgressCard extends StatelessWidget {
               ),
             ],
           ),
-
           const SizedBox(height: 12),
-
-          ...List.generate(steps.length, (index) => _buildProgressStep(index)),
+          ...List.generate(
+            steps.length,
+            (index) => _buildProgressStep(index, currentIndex),
+          ),
+          if (job.isCancelled || job.isDisputed) ...[
+            const Divider(),
+            Text(
+              job.isCancelled ? 'Request Cancelled' : 'Request Disputed',
+              style: const TextStyle(
+                color: Colors.red,
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
         ],
       ),
     );
   }
 
-  Widget _buildProgressStep(int index) {
-    final bool isCompleted = index == 0;
-    final bool isActive = index == 1;
-    final bool isLast = index == steps.length - 1;
+  Widget _buildProgressStep(int index, int currentIndex) {
+    final step = steps[index];
+    final isCompleted = currentIndex > index;
+    final isActive = currentIndex == index;
+    final isLast = index == steps.length - 1;
 
-    final Color activeColor = const Color(0xFF0054D8);
-
-    final Color circleColor = isCompleted || isActive
-        ? activeColor
+    final circleColor = isCompleted || isActive
+        ? const Color(0xFF0054D8)
         : const Color(0xFFDCE7FA);
 
-    final Color textColor = index <= 1
+    final textColor = isCompleted || isActive
         ? ColorsApp.primaryColor
         : ColorsApp.greyColor;
+
+    final stepTime = job.timeOf(step['status']!);
 
     return SizedBox(
       height: 60,
@@ -110,13 +140,10 @@ class ServiceProgressCard extends StatelessWidget {
                         : isActive
                         ? Icons.directions_car
                         : Icons.circle,
-                    color: isCompleted || isActive
-                        ? ColorsApp.whiteColor
-                        : ColorsApp.whiteColor,
+                    color: ColorsApp.whiteColor,
                     size: isActive ? 12 : 10,
                   ),
                 ),
-
                 if (!isLast)
                   Expanded(
                     child: Container(width: 1, color: const Color(0xFFB9D0FF)),
@@ -124,9 +151,7 @@ class ServiceProgressCard extends StatelessWidget {
               ],
             ),
           ),
-
           const SizedBox(width: 6),
-
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -134,7 +159,7 @@ class ServiceProgressCard extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      '${index + 1}. ${steps[index]['title']}',
+                      '${index + 1}. ${step['title']}',
                       style: TextStyle(
                         fontSize: 11,
                         fontWeight: isActive
@@ -143,7 +168,6 @@ class ServiceProgressCard extends StatelessWidget {
                         color: textColor,
                       ),
                     ),
-
                     if (isActive) ...[
                       const SizedBox(width: 5),
                       Container(
@@ -166,14 +190,12 @@ class ServiceProgressCard extends StatelessWidget {
                     ],
                   ],
                 ),
-
                 const SizedBox(height: 3),
-
                 Text(
-                  steps[index]['description']!,
+                  step['description']!,
                   style: TextStyle(
                     fontSize: 9,
-                    color: index <= 1
+                    color: isCompleted || isActive
                         ? ColorsApp.greyColor
                         : const Color(0xFFB8BEC9),
                   ),
@@ -181,12 +203,11 @@ class ServiceProgressCard extends StatelessWidget {
               ],
             ),
           ),
-
           Text(
-            steps[index]['time']!,
+            _formatTime(stepTime),
             style: TextStyle(
               fontSize: 9,
-              color: index <= 1
+              color: stepTime != null
                   ? ColorsApp.primaryColor
                   : const Color(0xFFB8BEC9),
             ),

@@ -1,10 +1,14 @@
 import 'package:final_depi/core/theme/app_colors.dart';
+import 'package:final_depi/features/customer_request_status/bloc/request_status_bloc.dart';
+import 'package:final_depi/features/customer_request_status/bloc/request_status_state.dart';
 import 'package:final_depi/features/customer_request_status/widgets/booking_summary_card.dart';
 import 'package:final_depi/features/customer_request_status/widgets/cancel_request_button.dart';
 import 'package:final_depi/features/customer_request_status/widgets/request_info_card.dart';
 import 'package:final_depi/features/customer_request_status/widgets/service_progress_card.dart';
 import 'package:final_depi/features/customer_request_status/widgets/technician_card_status.dart';
+import 'package:final_depi/features/jobs/job_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RequestStatusScreen extends StatelessWidget {
   const RequestStatusScreen({super.key, this.onBack});
@@ -21,24 +25,62 @@ class RequestStatusScreen extends StatelessWidget {
             _buildAppBar(context),
 
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: const [
-                    RequestInfoCard(),
-                    SizedBox(height: 12),
+              child: BlocListener<RequestStatusBloc, RequestStatusState>(
+                listener: (context, state) {
+                  if (state is RequestStatusDeleteSuccess) {
+                    onBack?.call();
+                  }
+                },
+                child: BlocBuilder<RequestStatusBloc, RequestStatusState>(
+                  builder: (context, state) {
+                    if (state is RequestStatusLoading ||
+                        state is RequestStatusInitial) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
 
-                    TechnicianCardStatus(),
-                    SizedBox(height: 12),
+                    if (state is RequestStatusEmpty) {
+                      return const Center(
+                        child: Text('No maintenance requests yet'),
+                      );
+                    }
 
-                    ServiceProgressCard(),
-                    SizedBox(height: 12),
+                    if (state is RequestStatusError) {
+                      return Center(child: Text(state.message));
+                    }
 
-                    BookingSummaryCard(),
-                    SizedBox(height: 16),
+                    if (state is RequestStatusDeleteSuccess) {
+                      return const Center(
+                        child: Text('Request deleted successfully'),
+                      );
+                    }
 
-                    CancelRequestButton(),
-                  ],
+                    if (state is RequestStatusDeleting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    if (state is RequestStatusLoaded) {
+                      final JobModel job = state.job;
+
+                      return SingleChildScrollView(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          children: [
+                            RequestInfoCard(job: job),
+                            const SizedBox(height: 12),
+                            TechnicianCardStatus(job: job),
+                            const SizedBox(height: 12),
+                            ServiceProgressCard(job: job),
+                            const SizedBox(height: 12),
+                            BookingSummaryCard(job: job),
+                            const SizedBox(height: 16),
+                            CancelRequestButton(),
+                          ],
+                        ),
+                      );
+                    }
+
+                    return const SizedBox.shrink();
+                  },
                 ),
               ),
             ),
