@@ -33,14 +33,14 @@ class RequestStatusEmpty extends RequestStatusState {
   const RequestStatusEmpty();
 }
 
-// Deleting the current request.
-class RequestStatusDeleting extends RequestStatusState {
-  const RequestStatusDeleting();
+// Cancelling the current request.
+class RequestStatusCancelling extends RequestStatusState {
+  const RequestStatusCancelling();
 }
 
-// Request deleted successfully.
-class RequestStatusDeleteSuccess extends RequestStatusState {
-  const RequestStatusDeleteSuccess();
+// Request cancelled successfully.
+class RequestStatusCancelSuccess extends RequestStatusState {
+  const RequestStatusCancelSuccess();
 }
 
 // Something went wrong.

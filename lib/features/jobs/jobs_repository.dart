@@ -40,6 +40,15 @@ class JobsRepository {
       .snapshots()
       .map(_toJobs);
 
+  Stream<List<JobModel>> watchIncomingRequests() {
+    return watchTechnicianJobs().map(
+      //watchTechnicianJobs() بتجيب الطلبات الخاصة بالفني اللى عندي
+      //map()
+      //بتسمح لنا نعدّل البيانات اللي بترجع من الـ Stream
+      (jobs) => jobs.where((job) => job.status == JobStatus.pending).toList(),
+    );
+  }
+
   Future<List<JobModel>> getTechnicianJobs([String? technicianId]) async {
     final snap = await _jobs
         .where('technicianId', isEqualTo: technicianId ?? currentUid)

@@ -27,7 +27,7 @@ class RequestStatusScreen extends StatelessWidget {
             Expanded(
               child: BlocListener<RequestStatusBloc, RequestStatusState>(
                 listener: (context, state) {
-                  if (state is RequestStatusDeleteSuccess) {
+                  if (state is RequestStatusCancelSuccess) {
                     onBack?.call();
                   }
                 },
@@ -48,13 +48,13 @@ class RequestStatusScreen extends StatelessWidget {
                       return Center(child: Text(state.message));
                     }
 
-                    if (state is RequestStatusDeleteSuccess) {
+                    if (state is RequestStatusCancelSuccess) {
                       return const Center(
-                        child: Text('Request deleted successfully'),
+                        child: Text('Request cancelled successfully'),
                       );
                     }
 
-                    if (state is RequestStatusDeleting) {
+                    if (state is RequestStatusCancelling) {
                       return const Center(child: CircularProgressIndicator());
                     }
 

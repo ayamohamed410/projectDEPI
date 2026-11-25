@@ -20,7 +20,7 @@ class RequestStatusBloc extends Bloc<RequestStatusEvent, RequestStatusState> {
     on<LatestRequestUpdated>(_onLatestRequestUpdated);
     on<LoadRequestById>(_onLoadRequestById);
     on<RequestByIdUpdated>(_onRequestByIdUpdated);
-    on<DeleteRequest>(_onDeleteRequest);
+    on<CancelRequest>(_onCancelRequest);
     on<RequestStatusLoadFailed>(_onLoadFailed);
   }
 
@@ -110,37 +110,23 @@ class RequestStatusBloc extends Bloc<RequestStatusEvent, RequestStatusState> {
     emit(RequestStatusError(event.message));
   }
 
-  // Delete the request and its chat messages.
-  Future<void> _onDeleteRequest(
-    DeleteRequest event,
+  // cancel the request and its chat messages.
+  Future<void> _onCancelRequest(
+    CancelRequest event,
     Emitter<RequestStatusState> emit,
   ) async {
     final job = _currentJob;
 
     if (job == null) return;
 
-    emit(const RequestStatusDeleting());
-
-    await _requestsSubscription?.cancel();
-    _requestsSubscription = null;
+    emit(const RequestStatusCancelling());
 
     try {
-      await _repository.deleteCustomerRequest(job.id);
+      await _repository.cancelJob(job.id, cancelledBy: 'customer');
 
-      _currentJob = null;
-      emit(const RequestStatusDeleteSuccess());
+      emit(const RequestStatusCancelSuccess());
     } catch (e) {
       emit(RequestStatusError(e.toString()));
-
-      _requestsSubscription = _repository.watchCustomerJobs().listen(
-        (jobs) {
-          final latestJob = jobs.isNotEmpty ? jobs.first : null;
-          add(LatestRequestUpdated(latestJob));
-        },
-        onError: (error) {
-          add(RequestStatusLoadFailed(error.toString()));
-        },
-      );
     }
   }
 

@@ -62,7 +62,7 @@ class CancelRequestButton extends StatelessWidget {
     );
 
     if (shouldCancel == true && context.mounted) {
-      context.read<RequestStatusBloc>().add(const DeleteRequest());
+      context.read<RequestStatusBloc>().add(const CancelRequest());
     }
   }
 

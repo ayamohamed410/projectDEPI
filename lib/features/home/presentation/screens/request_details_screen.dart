@@ -1,16 +1,77 @@
-import 'package:final_depi/core/theme/app_colors.dart';
-import 'package:final_depi/features/home/presentation/widgets/details_card.dart';
-import 'package:final_depi/features/home/presentation/widgets/section_row_title.dart';
 import 'package:flutter/material.dart';
+
+import 'package:final_depi/features/jobs/job_model.dart';
+import 'package:final_depi/features/jobs/jobs_repository.dart';
 
 const Color detailsBlue = Color(0xff17233F);
 const Color detailsBackground = Color(0xffF5F7FC);
 
-class RequestDetailsScreen extends StatelessWidget {
-  const RequestDetailsScreen({super.key});
+class RequestDetailsScreen extends StatefulWidget {
+  final JobModel job;
+
+  const RequestDetailsScreen({super.key, required this.job});
+
+  @override
+  State<RequestDetailsScreen> createState() => _RequestDetailsScreenState();
+}
+
+class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
+  bool _isAccepting = false;
+
+  Future<void> _acceptRequest() async {
+    if (_isAccepting) return;
+
+    setState(() => _isAccepting = true);
+
+    try {
+      await JobsRepository().acceptJob(widget.job.id);
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Request accepted successfully!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      Navigator.pop(context);
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Could not accept request: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+
+      setState(() => _isAccepting = false);
+    }
+  }
+
+  String _dateText(DateTime? date) {
+    if (date == null) return 'Date not available';
+    return '${date.day}/${date.month}/${date.year}';
+  }
+
+  String _moneyText(double amount) {
+    if (amount <= 0) return 'Not specified';
+    return 'EGP ${amount.toStringAsFixed(0)}';
+  }
+
+  Future<void> _showDeclineNotice() async {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Decline action needs a separate rejection status.'),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    final job = widget.job;
+
     return Scaffold(
       backgroundColor: detailsBackground,
       appBar: AppBar(
@@ -19,6 +80,7 @@ class RequestDetailsScreen extends StatelessWidget {
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
           icon: const Icon(Icons.arrow_back_ios, size: 18),
+          color: detailsBlue,
         ),
         title: const Text(
           'Request Details',
@@ -28,215 +90,119 @@ class RequestDetailsScreen extends StatelessWidget {
             color: detailsBlue,
           ),
         ),
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: CircleAvatar(
-              radius: 15,
-              backgroundColor: detailsBlue,
-              child: Icon(Icons.person, color: Colors.white, size: 18),
-            ),
-          ),
-        ],
       ),
-
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Request status
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: const Color(0xffFFF4DC),
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: const Color(0xffF1D99C)),
-              ),
-              child: const Row(
-                children: [
-                  Icon(Icons.access_time, color: Color(0xffA66A00)),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'Accept within 01:44:30 to secure this job',
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: Color(0xff8A5A00),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 14),
-
-            DetailsCard(
-              color: Colors.white,
-
+            _infoCard(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Water Heater Element Sparking & Rapid Cutoff',
-                    style: TextStyle(
+                  Text(
+                    job.diagnosisTitle,
+                    style: const TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.bold,
                       color: detailsBlue,
                     ),
                   ),
-                  const SizedBox(height: 10),
-
-                  const Wrap(
-                    spacing: 7,
-                    runSpacing: 7,
-                    children: [
-                      DetailsTag(label: 'Plumbing'),
-                      DetailsTag(label: 'Water Heaters'),
-                      DetailsTag(label: 'High Urgency'),
-                    ],
-                  ),
-
                   const SizedBox(height: 12),
-
-                  const Row(
-                    children: [
-                      Icon(Icons.person_outline, size: 17),
-                      SizedBox(width: 6),
-                      Text(
-                        'Customer: Fatima Hassan',
-                        style: TextStyle(fontSize: 11),
-                      ),
-                    ],
+                  _infoRow(
+                    Icons.confirmation_number_outlined,
+                    'Request: ${job.requestNumber.isEmpty ? job.id : job.requestNumber}',
                   ),
-
-                  const SizedBox(height: 7),
-
-                  const Row(
-                    children: [
-                      Icon(Icons.access_time, size: 17),
-                      SizedBox(width: 6),
-                      Text(
-                        'Requested Today • ASAP',
-                        style: TextStyle(fontSize: 11),
-                      ),
-                    ],
+                  const SizedBox(height: 8),
+                  _infoRow(
+                    Icons.person_outline,
+                    'Customer: ${job.customerName.isEmpty ? 'Not provided' : job.customerName}',
+                  ),
+                  const SizedBox(height: 8),
+                  _infoRow(
+                    Icons.location_on_outlined,
+                    'Location: ${job.customerArea.isEmpty ? 'Not provided' : job.customerArea}',
+                  ),
+                  const SizedBox(height: 8),
+                  _infoRow(
+                    Icons.access_time,
+                    'Requested: ${_dateText(job.createdAt)}',
                   ),
                 ],
               ),
             ),
-
             const SizedBox(height: 12),
-
-            //  description
-            const DetailsCard(
-              color: ColorsApp.blue,
-
+            _infoCard(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SectionTitle(
-                    icon: Icons.description_outlined,
-                    title: 'Customer Description',
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    '"The electric water heater in the master bathroom '
-                    'clicked loudly, sparked near the bottom heating '
-                    'flange, and tripped the circuit breaker. Needs '
-                    'urgent inspection and replacement if necessary."',
-                    style: TextStyle(fontSize: 12, height: 1.6),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 12),
-
-            DetailsCard(
-              color: Colors.white,
-
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SectionTitle(
-                    icon: Icons.photo_library_outlined,
-                    title: 'Customer Photos (2 Attached)',
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Image.asset("assets/images/damadge2.png"),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Image.asset("assets/images/damadge1.png"),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 12),
-
-            // الدفع
-            DetailsCard(
-              color: ColorsApp.blue,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SectionTitle(
-                    icon: Icons.payments_outlined,
-                    title: 'Payout Estimate',
-                  ),
-
-                  const SizedBox(height: 12),
-
                   const Text(
-                    'Estimated Technician Earnings',
-                    style: TextStyle(fontSize: 11, color: Colors.grey),
-                  ),
-
-                  const SizedBox(height: 4),
-
-                  const Text(
-                    'EGP 450 – 700',
+                    'Customer Description',
                     style: TextStyle(
-                      fontSize: 25,
+                      fontSize: 14,
                       fontWeight: FontWeight.bold,
                       color: detailsBlue,
                     ),
                   ),
-
-                  const Divider(height: 22),
-
-                  const PaymentRow(
-                    title: 'Standard Diagnostic & Labor Fee',
-                    amount: 'EGP 300',
-                  ),
-
-                  const SizedBox(height: 9),
-
-                  const PaymentRow(
-                    title: 'Estimated Parts / Materials',
-                    amount: 'EGP 150 – 400',
-                  ),
-
-                  const SizedBox(height: 9),
-
-                  const PaymentRow(
-                    title: 'Customer Budget',
-                    amount: 'EGP 450 – 700',
+                  const SizedBox(height: 10),
+                  Text(
+                    job.problemDescription.isEmpty
+                        ? 'No description provided.'
+                        : job.problemDescription,
+                    style: const TextStyle(fontSize: 12, height: 1.6),
                   ),
                 ],
               ),
             ),
-
-            const SizedBox(height: 15),
+            const SizedBox(height: 12),
+            _infoCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Payout Estimate',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: detailsBlue,
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  _paymentRow('Base Amount', _moneyText(job.baseAmount)),
+                  const SizedBox(height: 10),
+                  _paymentRow('Parts Amount', _moneyText(job.partsAmount)),
+                  const Divider(height: 22),
+                  _paymentRow(
+                    'Customer Budget',
+                    _moneyText(job.totalAmount),
+                    bold: true,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
+            _infoCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Customer Contact',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: detailsBlue,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  _infoRow(
+                    Icons.phone_outlined,
+                    job.customerPhone.isEmpty
+                        ? 'Phone number not provided'
+                        : job.customerPhone,
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -246,88 +212,37 @@ class RequestDetailsScreen extends StatelessWidget {
           color: Colors.white,
           child: Row(
             children: [
-              // Decline Button
               Expanded(
                 child: OutlinedButton(
-                  onPressed: () async {
-                    final result = await showDialog<bool>(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: const Text('Decline Request'),
-                          content: const Text(
-                            'Are you sure you want to decline this request?',
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context, false);
-                              },
-                              child: const Text('Cancel'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context, true);
-                              },
-                              child: const Text(
-                                'Decline',
-                                style: TextStyle(color: Colors.red),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-
-                    if (result == true) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Request declined successfully!'),
-                        ),
-                      );
-
-                      Navigator.pop(context);
-                    }
-                  },
+                  onPressed: _isAccepting ? null : _showDeclineNotice,
                   style: OutlinedButton.styleFrom(
                     foregroundColor: Colors.red,
                     side: const BorderSide(color: Colors.red),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                    minimumSize: const Size(0, 48),
                   ),
-                  child: const Text(
-                    'Decline',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
+                  child: const Text('Decline'),
                 ),
               ),
-
               const SizedBox(width: 10),
-
-              //  Buttons
               Expanded(
                 flex: 2,
                 child: ElevatedButton.icon(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Request accepted successfully!'),
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.check_circle_outline),
-                  label: const Text(
-                    'Accept Request',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
-                  ),
+                  onPressed: _isAccepting ? null : _acceptRequest,
+                  icon: _isAccepting
+                      ? const SizedBox(
+                          width: 17,
+                          height: 17,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : const Icon(Icons.check_circle_outline),
+                  label: Text(_isAccepting ? 'Accepting...' : 'Accept Request'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: detailsBlue,
                     foregroundColor: Colors.white,
-                    minimumSize: const Size(double.infinity, 48),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                    minimumSize: const Size(0, 48),
                   ),
                 ),
               ),
@@ -337,82 +252,48 @@ class RequestDetailsScreen extends StatelessWidget {
       ),
     );
   }
-}
 
-// Tags
-class DetailsTag extends StatelessWidget {
-  final String label;
-
-  const DetailsTag({super.key, required this.label});
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _infoCard({required Widget child}) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: const Color(0xffEDF3FC),
-        borderRadius: BorderRadius.circular(20),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
       ),
-      child: Text(
-        label,
-        style: const TextStyle(fontSize: 10, color: detailsBlue),
-      ),
+      child: child,
     );
   }
-}
 
-class PhotoPlaceholder extends StatelessWidget {
-  final IconData icon;
-  final String label;
-
-  const PhotoPlaceholder({super.key, required this.icon, required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 100,
-      decoration: BoxDecoration(
-        color: const Color(0xffE9EDF4),
-        borderRadius: BorderRadius.circular(9),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, size: 35, color: Colors.blueGrey),
-          const SizedBox(height: 5),
-          Text(
-            label,
-            style: const TextStyle(fontSize: 10, color: Colors.blueGrey),
-          ),
-        ],
-      ),
+  Widget _infoRow(IconData icon, String text) {
+    return Row(
+      children: [
+        Icon(icon, size: 17, color: Colors.blueGrey),
+        const SizedBox(width: 8),
+        Expanded(child: Text(text, style: const TextStyle(fontSize: 12))),
+      ],
     );
   }
-}
 
-//********************************** */
-class PaymentRow extends StatelessWidget {
-  final String title;
-  final String amount;
-
-  const PaymentRow({super.key, required this.title, required this.amount});
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _paymentRow(String title, String amount, {bool bold = false}) {
     return Row(
       children: [
         Expanded(
           child: Text(
             title,
-            style: const TextStyle(fontSize: 10, color: Colors.grey),
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.grey.shade700,
+              fontWeight: bold ? FontWeight.bold : FontWeight.normal,
+            ),
           ),
         ),
         Text(
           amount,
-          style: const TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.bold,
+          style: TextStyle(
+            fontSize: 12,
             color: detailsBlue,
+            fontWeight: bold ? FontWeight.bold : FontWeight.w600,
           ),
         ),
       ],

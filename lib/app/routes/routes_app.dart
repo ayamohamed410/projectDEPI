@@ -1,10 +1,8 @@
 import 'package:final_depi/app/routes/route_screen_name.dart';
 import 'package:final_depi/features/home/presentation/screens/incoming_requests_screen.dart';
 import 'package:final_depi/features/home/presentation/screens/request_details_screen.dart';
-import 'package:final_depi/features/technician_home/technician_home.dart';
+import 'package:final_depi/features/Technician/presentation/pages/technician_home/technician_home.dart';
 import 'package:flutter/material.dart';
-
-import 'package:flutter/widgets.dart';
 
 import '../../features/auth/presentation/pages/forgetPassword/forget_password.dart';
 import '../../features/auth/presentation/pages/login/login_screen.dart';
@@ -30,6 +28,11 @@ import '../../features/customer_service_details/screens/customer_service_details
 import '../../features/customer_settings/screens/customer_settings_screens.dart';
 
 import '../../features/rating_and_review/screens/rating_and_review_screen.dart';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../features/Technician/presentation/bloc/incoming_requests/incoming_requests_bloc.dart';
+import '../../features/jobs/jobs_repository.dart';
+import '../../features/jobs/job_model.dart';
 
 abstract class RoutesApp {
   static Route<dynamic> onGeneratedRoute(RouteSettings settings) {
@@ -150,19 +153,25 @@ abstract class RoutesApp {
           settings: settings,
         );
       case RouteScreenName.incomingRequestsScreen:
+      case RouteScreenName.incomingRequests:
         return MaterialPageRoute(
-          builder: (context) => const IncomingRequestsScreen(),
+          builder: (context) => BlocProvider(
+            create: (_) =>
+                IncomingRequestsBloc(JobsRepository())
+                  ..add(const LoadIncomingRequests()),
+            child: const IncomingRequestsScreen(),
+          ),
           settings: settings,
         );
       case RouteScreenName.requestDetailsScreen:
-        return MaterialPageRoute(
-          builder: (context) => const RequestDetailsScreen(),
-          settings: settings,
-        );
+        final job = settings.arguments;
 
-      case RouteScreenName.incomingRequests:
         return MaterialPageRoute(
-          builder: (context) => const IncomingRequestsScreen(),
+          builder: (context) => job is JobModel
+              ? RequestDetailsScreen(job: job)
+              : const Scaffold(
+                  body: Center(child: Text('Request data is missing')),
+                ),
           settings: settings,
         );
 

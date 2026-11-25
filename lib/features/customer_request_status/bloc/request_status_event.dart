@@ -44,8 +44,8 @@ class RequestByIdUpdated extends RequestStatusEvent {
 }
 
 // Delete the current maintenance request.
-class DeleteRequest extends RequestStatusEvent {
-  const DeleteRequest();
+class CancelRequest extends RequestStatusEvent {
+  const CancelRequest();
 }
 
 class RequestStatusLoadFailed extends RequestStatusEvent {
